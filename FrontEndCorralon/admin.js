@@ -89,18 +89,19 @@ function asignarEventosPrincipales() {
         });
     });
 }
+const API_URL = 'https://corralon-backend.onrender.com';
 
 async function cargarDatos(token) {
     try {
         console.log("Cargando datos...");
         const [productosResponse, categoriasResponse] = await Promise.all([
-            fetch("https://localhost:7260/api/Productos", {
+            fetch(`${API_URL}/api/Productos`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Cache-Control": "no-cache"
                 }
             }),
-            fetch("https://localhost:7260/api/Categorias", {
+            fetch(`${API_URL}/api/Categorias`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Cache-Control": "no-cache"
