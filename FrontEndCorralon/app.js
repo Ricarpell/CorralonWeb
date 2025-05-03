@@ -4,13 +4,13 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const submitBtn = event.target.querySelector("button[type='submit']");
-    
+    const API_URL = 'https://corralon-backend.onrender.com';
     // Mostrar estado de carga
     submitBtn.innerHTML = '<span class="loading-spinner"></span> Autenticando...';
     submitBtn.disabled = true;
     
     try {
-        const response = await fetch("https://localhost:7260/api/Auth/login", {
+        const response = await fetch(`${API_URL}/api/Auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
