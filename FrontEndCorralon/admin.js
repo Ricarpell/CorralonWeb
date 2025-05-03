@@ -323,7 +323,7 @@ async function guardarProducto(token) {
 
     const producto = { id: id ? parseInt(id) : 0, nombre, categoriaId, precio, stock };
     const method = id ? "PUT" : "POST";
-    const url = id ? `https://localhost:7260/api/Productos/${id}` : "https://localhost:7260/api/Productos";
+    const url = id ? `${API_URL}/api/Productos/${id}` : `${API_URL}/api/Productos`;
 
     console.log(`Guardando producto:`, producto);
 
@@ -361,7 +361,7 @@ async function guardarCategoria(token) {
     const nombre = document.getElementById("categoriaNombre").value;
     const categoria = { id: id ? parseInt(id) : 0, nombre };
     const method = id ? "PUT" : "POST";
-    const url = id ? `https://localhost:7260/api/Categorias/${id}` : "https://localhost:7260/api/Categorias";
+    const url = id ? `${API_URL}/api/Categorias/${id}` : `${API_URL}/api/Categorias`;
 
     try {
         const response = await fetch(url, {
@@ -393,7 +393,7 @@ async function eliminarProducto(id, token) {
     if (!confirm("¿Estás seguro de eliminar este producto?")) return;
 
     try {
-        const response = await fetch(`https://localhost:7260/api/Productos/${id}`, {
+        const response = await fetch(`${API_URL}/api/Productos/${id}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
         });
@@ -415,7 +415,7 @@ async function eliminarCategoria(id, token) {
     if (!confirm("¿Estás seguro de eliminar esta categoría?")) return;
 
     try {
-        const response = await fetch(`https://localhost:7260/api/Categorias/${id}`, {
+        const response = await fetch(`${API_URL}/api/Categorias/${id}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
         });
