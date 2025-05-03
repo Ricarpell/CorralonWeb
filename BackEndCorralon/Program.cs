@@ -90,7 +90,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
-            ?? new[] { "http://localhost", "https://localhost", "http://localhost:5500", "http://127.0.0.1:5500" };
+            ?? new[] { "http://localhost", "https://localhost", "http://localhost:5500", "http://127.0.0.1:5500", "https://corralon-frontend.onrender.com" };
 
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
