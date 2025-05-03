@@ -9,6 +9,7 @@ let sortColumnVentas = null;
 let sortDirectionVentas = 'asc';
 let carritoEdicion = [];
 let ventaIdEdicion = null;
+const API_URL = 'https://corralon-backend.onrender.com';
 
 // Decodificar token para obtener UsuarioId
 function getUsuarioIdFromToken(token) {
@@ -155,9 +156,9 @@ function getColumnKeyVentas(index) {
 async function cargarDatos(token) {
     try {
         const [productosResponse, categoriasResponse, clientesResponse] = await Promise.all([
-            fetch("https://localhost:7260/api/Productos", { headers: { "Authorization": `Bearer ${token}` } }),
-            fetch("https://localhost:7260/api/Categorias", { headers: { "Authorization": `Bearer ${token}` } }),
-            fetch("https://localhost:7260/api/Clientes", { headers: { "Authorization": `Bearer ${token}` } })
+            fetch(`${API_URL}/api/Productos`, { headers: { "Authorization": `Bearer ${token}` } }),
+            fetch(`${API_URL}/api/Categorias`, { headers: { "Authorization": `Bearer ${token}` } }),
+            fetch(`${API_URL}/api/Clientes`, { headers: { "Authorization": `Bearer ${token}` } })
         ]);
 
         if (!productosResponse.ok) throw new Error("Error al cargar productos");
@@ -538,7 +539,7 @@ async function confirmarVenta() {
     if (!confirm("¿Confirmar la venta?")) return;
 
     try {
-        const response = await fetch("https://localhost:7260/api/Ventas", {
+        const response = await fetch(`${API_URL}/api/Ventas`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -579,7 +580,7 @@ async function confirmarVenta() {
 // Función para cargar el historial de ventas
 async function cargarHistorialVentas(token) {
     try {
-        const response = await fetch("https://localhost:7260/api/Ventas", {
+        const response = await fetch(`${API_URL}/api/Ventas`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -664,7 +665,7 @@ function actualizarEncabezadosVentas() {
 async function mostrarDetalleVenta(id) {
     const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`https://localhost:7260/api/Ventas/${id}`, {
+        const response = await fetch(`${API_URL}/api/Ventas/${id}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -700,7 +701,7 @@ async function abrirEditarVenta(id) {
     console.log(`Intentando abrir edición para venta ID: ${id}`);
     const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`https://localhost:7260/api/Ventas/${id}`, {
+        const response = await fetch(`${API_URL}/api/Ventas/${id}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -870,7 +871,7 @@ async function guardarVentaEditada() {
 
     try {
         console.log("Enviando solicitud PUT...");
-        const response = await fetch(`https://localhost:7260/api/Ventas/${ventaIdEdicion}`, {
+        const response = await fetch(`${API_URL}/api/api/Ventas/${ventaIdEdicion}`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,

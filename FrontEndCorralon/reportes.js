@@ -4,6 +4,7 @@ let productosLista = [];
 let clientesLista = [];
 let ultimoReporte = null;
 let printVentasChart = null; // Variable para el gráfico imprimible
+const API_URL = 'https://corralon-backend.onrender.com';
 
 /* Función principal de inicialización */
 function initReportes() {
@@ -75,7 +76,7 @@ async function cargarFiltros(token) {
         // Cargar productos
         const productoSelect = document.getElementById("productoId");
         if (productoSelect) {
-            const productosResponse = await fetch("https://localhost:7260/api/Productos", {
+            const productosResponse = await fetch(`${API_URL}/api/Productos`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!productosResponse.ok) throw new Error("Error al cargar productos: " + productosResponse.statusText);
@@ -92,7 +93,7 @@ async function cargarFiltros(token) {
         // Cargar vendedores
         const usuarioSelect = document.getElementById("usuarioId");
         if (usuarioSelect) {
-            const usuariosResponse = await fetch("https://localhost:7260/api/Usuarios", {
+            const usuariosResponse = await fetch(`${API_URL}/api/Usuarios`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!usuariosResponse.ok) throw new Error("Error al cargar vendedores: " + usuariosResponse.statusText);
@@ -109,7 +110,7 @@ async function cargarFiltros(token) {
         // Cargar clientes
         const clienteSelect = document.getElementById("clienteId");
         if (clienteSelect) {
-            const clientesResponse = await fetch("https://localhost:7260/api/Clientes", {
+            const clientesResponse = await fetch(`${API_URL}/api/Clientes`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!clientesResponse.ok) throw new Error("Error al cargar clientes: " + clientesResponse.statusText);
@@ -149,7 +150,7 @@ async function obtenerDatosReporte(token, fechaDesde, fechaHasta, productoId, us
     if (usuarioId) params.append("usuarioId", usuarioId);
     if (clienteId) params.append("clienteId", clienteId);
 
-    const url = `https://localhost:7260/api/reportes/ventas?${params.toString()}`;
+    const url = `${API_URL}/api/Ventas?${params.toString()}`;
     const response = await fetch(url, {
         headers: { "Authorization": `Bearer ${token}` }
     });

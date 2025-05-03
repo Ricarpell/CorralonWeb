@@ -1,6 +1,7 @@
 // Variables del módulo
 const clientes = [];
 let isSubmitting = false;
+const API_URL = 'https://corralon-backend.onrender.com';
 
 // Función principal de inicialización
 function initClientes() {
@@ -47,7 +48,7 @@ function asignarEventosPrincipales() {
 // Función para cargar datos iniciales
 async function cargarDatos(token) {
     try {
-        const response = await fetch("https://localhost:7260/api/Clientes", {
+        const response = await fetch(`${API_URL}/api/api/Clientes`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -156,7 +157,7 @@ async function guardarCliente(token) {
     };
 
     const method = id ? "PUT" : "POST";
-    const url = id ? `https://localhost:7260/api/Clientes/${id}` : "https://localhost:7260/api/Clientes";
+    const url = id ? `${API_URL}/api/api/Clientes/${id}` : `${API_URL}/api/api/Clientes`;
 
     try {
         const response = await fetch(url, {
@@ -189,7 +190,7 @@ async function eliminarCliente(id, token) {
     if (!confirm("¿Estás seguro de eliminar este cliente?")) return;
 
     try {
-        const response = await fetch(`https://localhost:7260/api/Clientes/${id}`, {
+        const response = await fetch(`${API_URL}/api/api/Clientes/${id}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
         });
