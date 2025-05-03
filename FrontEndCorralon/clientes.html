@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes - Sistema de Ventas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">Gestión de Clientes</div>
+            <div>
+                <button id="volverDashboard" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button id="cerrarSesion" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container admin-container">
+        <section class="admin-section">
+            <div class="admin-actions">
+                <button id="nuevoClienteBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Cliente
+                </button>
+            </div>
+            <h2 class="section-title">
+                <i class="fas fa-users"></i> Clientes
+            </h2>
+            <div class="table-container">
+                <table id="listaClientes" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Modal para Cliente -->
+        <div id="modalCliente" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-user"></i> <span id="modalClienteTitle">Nuevo Cliente</span>
+                    </h3>
+                    <button class="close-modal">×</button>
+                </div>
+                <form id="formCliente">
+                    <div class="modal-body">
+                        <input type="hidden" id="clienteId">
+                        <div class="form-group">
+                            <label for="clienteNombre" class="form-label">Nombre</label>
+                            <input type="text" id="clienteNombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clienteEmail" class="form-label">Email</label>
+                            <input type="email" id="clienteEmail" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clienteTelefono" class="form-label">Teléfono</label>
+                            <input type="text" id="clienteTelefono" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="clienteDireccion" class="form-label">Dirección</label>
+                            <input type="text" id="clienteDireccion" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="clientes.js"></script>
+    <script>
+        document.getElementById("volverDashboard").addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+
+        document.getElementById("cerrarSesion").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>

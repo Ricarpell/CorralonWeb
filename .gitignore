@@ -1,0 +1,15 @@
+# Archivos generados por ASP.NET Core (Backend)
+BackEndCorralon/bin/
+BackEndCorralon/obj/
+BackEndCorralon/appsettings.json
+BackEndCorralon/appsettings.Development.json
+
+# Archivos generados por el Frontend (si usas Node.js)
+FrontEndCorralon/node_modules/
+FrontEndCorralon/dist/
+FrontEndCorralon/build/
+
+# Archivos temporales
+*.log
+*.vs/
+.DS_Store

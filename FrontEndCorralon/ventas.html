@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta - Sistema de Ventas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">Punto de Venta</div>
+            <div>
+                <button id="volverDashboard" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button id="cerrarSesion" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="ventas-grid">
+            <!-- Lista de Productos -->
+            <section class="productos-section">
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-boxes"></i> Productos
+                    </h2>
+                    <div class="filtros">
+                        <div class="form-group">
+                            <label class="form-label">Categoría</label>
+                            <select id="filtroCategoria" class="form-control">
+                                <option value="">Todas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Buscar</label>
+                            <input type="text" id="buscarProducto" class="form-control" placeholder="Nombre del producto">
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="listaProductos" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Stock</th>
+                                    <th>Precio Venta</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Carrito de Compras -->
+            <section>
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-shopping-cart"></i> Carrito de Compras
+                    </h2>
+                    <div class="form-group">
+                        <label for="clienteId" class="form-label">Cliente (opcional)</label>
+                        <select id="clienteId" class="form-control">
+                            <option value="">Sin cliente</option>
+                        </select>
+                    </div>
+                    <div id="carrito">
+                        <p class="empty-cart">No hay productos en el carrito</p>
+                    </div>
+                    <div class="carrito-total">
+                        Total: $<span id="total">0.00</span>
+                    </div>
+                    <button id="confirmarVenta" class="btn btn-success btn-block">
+                        <i class="fas fa-check-circle"></i> Confirmar Venta
+                    </button>
+                </div>
+            </section>
+
+            <!-- Historial de Ventas -->
+            <section class="historial-section">
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-history"></i> Historial de Ventas
+                    </h2>
+                    <div class="table-container">
+                        <table id="historialVentas" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Modal para Detalle de Venta -->
+        <div id="modalDetalleVenta" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-receipt"></i> Detalle de Venta
+                    </h3>
+                    <button class="close-modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>ID Venta:</strong> <span id="ventaId"></span></p>
+                    <p><strong>Fecha:</strong> <span id="ventaFecha"></span></p>
+                    <p><strong>Vendedor:</strong> <span id="ventaVendedor"></span></p>
+                    <p><strong>Cliente:</strong> <span id="ventaCliente"></span></p>
+                    <p><strong>Total:</strong> $<span id="ventaTotal"></span></p>
+                    <h4>Productos</h4>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detalleVentaProductos"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary close-modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para Editar Venta -->
+        <div id="modalEditarVenta" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-edit"></i> Editar Venta
+                    </h3>
+                    <button class="close-modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>ID Venta:</strong> <span id="editarVentaId"></span></p>
+                    <div class="form-group">
+                        <label for="editarClienteId" class="form-label">Cliente (opcional)</label>
+                        <select id="editarClienteId" class="form-control">
+                            <option value="">Sin cliente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="agregarProductoId" class="form-label">Agregar Producto</label>
+                        <div class="input-group">
+                            <select id="agregarProductoId" class="form-control">
+                                <option value="">Seleccione un producto</option>
+                            </select>
+                            <button id="agregarProductoBtn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                    <h4>Productos</h4>
+                    <div id="editarCarrito">
+                        <p class="empty-cart">No hay productos en el carrito</p>
+                    </div>
+                    <div class="carrito-total">
+                        Total: $<span id="editarTotal">0.00</span>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button id="guardarVenta" class="btn btn-success">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    <button class="btn btn-secondary close-modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="ventas.js"></script>
+    <script>
+        document.getElementById("volverDashboard").addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+
+        document.getElementById("cerrarSesion").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>

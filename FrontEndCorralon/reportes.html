@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Sistema de Ventas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">Reportes de Ventas</div>
+            <div>
+                <button id="volverDashboard" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button id="cerrarSesion" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2 class="card-title">
+                <i class="fas fa-chart-line"></i> Filtros de Reporte
+            </h2>
+            <div class="filtros-ventas">
+                <div class="form-group">
+                    <label class="form-label">Fecha Desde</label>
+                    <input type="date" id="fechaDesde" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fecha Hasta</label>
+                    <input type="date" id="fechaHasta" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Vendedor</label>
+                    <select id="usuarioId" class="form-control">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Producto</label>
+                    <select id="productoId" class="form-control">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cliente</label>
+                    <select id="clienteId" class="form-control">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="incluirGrafico" checked>
+                    Incluir gráfico en exportación e impresión
+                </label>
+            </div>
+            <div class="form-actions">
+                <button id="generarReporte" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Generar Reporte
+                </button>
+                <button id="imprimirReporte" class="btn btn-secondary" disabled>
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+                <button id="exportarPDF" class="btn btn-success" disabled>
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+                <button id="exportarExcel" class="btn btn-info" disabled>
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                </button>
+            </div>
+        </section>
+
+        <section class="reporte-totales">
+            <div class="total-card">
+                <i class="fas fa-shopping-cart"></i>
+                <h4>Total Ventas</h4>
+                <p id="totalVentas">$0.00</p>
+            </div>
+            <div class="total-card">
+                <i class="fas fa-boxes"></i>
+                <h4>Productos Vendidos</h4>
+                <p id="totalProductos">0</p>
+            </div>
+            <div class="total-card">
+                <i class="fas fa-user-tie"></i>
+                <h4>Vendedor Destacado</h4>
+                <p id="vendedorDestacado">N/A</p>
+            </div>
+            <div class="total-card">
+                <i class="fas fa-user"></i>
+                <h4>Cliente Destacado</h4>
+                <p id="clienteDestacado">N/A</p>
+            </div>
+            <div class="total-card">
+                <i class="fas fa-star"></i>
+                <h4>Producto Más Vendido</h4>
+                <p id="productoDestacado">N/A</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">
+                <i class="fas fa-table"></i> Detalle de Ventas
+            </h2>
+            <div class="table-container">
+                <table id="detalleVentas" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Vendedor</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">
+                <i class="fas fa-chart-line"></i> Ventas por Fecha
+            </h2>
+            <canvas id="ventasChart"></canvas>
+        </section>
+
+        <!-- Sección para informe imprimible (oculta en pantalla) -->
+        <div id="printableReport" class="printable-report">
+            <h1>Informe de Ventas</h1>
+            <div class="resumen-columnas">
+                <div class="columna">
+                    <p><strong>Periodo:</strong> <span id="printPeriodo"></span></p>
+                    <p><strong>Vendedor:</strong> <span id="printVendedor"></span></p>
+                    <p><strong>Cliente:</strong> <span id="printCliente"></span></p>
+                </div>
+                <div class="columna">
+                    <p><strong>Producto:</strong> <span id="printProducto"></span></p>
+                    <p><strong>Total Ventas:</strong> <span id="printTotalVentas"></span></p>
+                    <p><strong>Productos Vendidos:</strong> <span id="printTotalProductos"></span></p>
+                </div>
+            </div>
+            <h2 id="graficoTitulo" style="display: none;">Ventas por Fecha</h2>
+            <canvas id="printVentasChart" style="display: none;"></canvas>
+            <h2>Detalle de Ventas</h2>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Vendedor</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="printDetalleVentas"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="reportes.js"></script>
+</body>
+</html>

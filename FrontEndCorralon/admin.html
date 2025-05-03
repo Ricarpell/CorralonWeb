@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-container {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-container input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .admin-table th {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        .admin-table th.sort-asc::after {
+            content: '↑';
+            position: absolute;
+            right: 5px;
+            color: #007bff;
+        }
+        .admin-table th.sort-desc::after {
+            content: '↓';
+            position: absolute;
+            right: 5px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">Sistema de Ventas</div>
+            <div>
+                <button id="volverDashboard" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button id="cerrarSesion" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container admin-container">
+        <section class="admin-section">
+            <div class="admin-actions">
+                <button id="nuevoProductoBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+            <h2 class="section-title">
+                <i class="fas fa-boxes"></i> Productos
+            </h2>
+            <div class="search-container">
+                <input type="text" id="productoSearch" placeholder="Buscar producto por nombre...">
+            </div>
+            <div class="table-container">
+                <table id="listaProductos" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="nombre">Producto</th>
+                            <th data-sort="categoria">Categoría</th>
+                            <th data-sort="precio">Precio Venta</th>
+                            <th data-sort="stock">Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <div class="admin-actions">
+                <button id="nuevaCategoriaBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nueva Categoría
+                </button>
+            </div>
+            <h2 class="section-title">
+                <i class="fas fa-tags"></i> Categorías
+            </h2>
+            <div class="search-container">
+                <input type="text" id="categoriaSearch" placeholder="Buscar categoría por nombre...">
+            </div>
+            <div class="table-container">
+                <table id="listaCategorias" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="nombre">Nombre</th>
+                            <th data-sort="productos">Cantidad de Productos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Modal para Producto -->
+        <div id="modalProducto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-box"></i> <span id="modalProductoTitle">Nuevo Producto</span>
+                    </h3>
+                    <button class="close-modal">×</button>
+                </div>
+                <form id="formProducto">
+                    <div class="modal-body">
+                        <input type="hidden" id="productoId">
+                        <div class="form-group">
+                            <label for="productoNombre" class="form-label">Nombre</label>
+                            <input type="text" id="productoNombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productoCategoria" class="form-label">Categoría</label>
+                            <select id="productoCategoria" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productoPrecio" class="form-label">Precio Venta</label>
+                            <input type="number" id="productoPrecio" class="form-control" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productoStock" class="form-label">Stock</label>
+                            <input type="number" id="productoStock" class="form-control" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para Categoría -->
+        <div id="modalCategoria" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-tag"></i> <span id="modalCategoriaTitle">Nueva Categoría</span>
+                    </h3>
+                    <button class="close-modal">×</button>
+                </div>
+                <form id="formCategoria">
+                    <div class="modal-body">
+                        <input type="hidden" id="categoriaId">
+                        <div class="form-group">
+                            <label for="categoriaNombre" class="form-label">Nombre</label>
+                            <input type="text" id="categoriaNombre" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+    <script>
+        document.getElementById("volverDashboard").addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+
+        document.getElementById("cerrarSesion").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Ventas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+   
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">VentasPlus</div>
+            <button id="cerrarSesion" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-message">
+            <h1>Bienvenido al Panel de Control</h1>
+            <p>Gestiona todas las operaciones de tu negocio desde aquí</p>
+        </div>
+        
+        <div class="dashboard-container">
+            <div class="dashboard-card" onclick="navigate('admin.html')">
+                <i class="fas fa-boxes"></i>
+                <h3>Gestión de Productos</h3>
+                <p>Administra tu inventario y categorías</p>
+                <button class="btn btn-primary mt-2">Acceder</button>
+            </div>
+            
+            <div class="dashboard-card" onclick="navigate('ventas.html')">
+                <i class="fas fa-cash-register"></i>
+                <h3>Punto de Venta</h3>
+                <p>Registra nuevas ventas y transacciones</p>
+                <button class="btn btn-primary mt-2">Acceder</button>
+            </div>
+            
+            <div class="dashboard-card" onclick="navigate('reportes.html')">
+                <i class="fas fa-chart-line"></i>
+                <h3>Reportes</h3>
+                <p>Visualiza métricas y estadísticas</p>
+                <button class="btn btn-primary mt-2">Acceder</button>
+            </div>
+            
+            <div class="dashboard-card" onclick="navigate('clientes.html')">
+                <i class="fas fa-users"></i>
+                <h3>Clientes</h3>
+                <p>Administra tu base de clientes</p>
+                <button class="btn btn-primary mt-2">Acceder</button>
+            </div>
+
+            <!-- Nueva tarjeta para Compras -->
+            <!-- <div class="dashboard-card" onclick="navigate('compras.html')">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>Compras</h3>
+                <p>Gestiona las compras y el inventario</p>
+                <button class="btn btn-primary mt-2">Acceder</button>
+            </div> -->
+
+            <!-- Nueva tarjeta para Proveedores -->
+            <!-- <div class="dashboard-card" onclick="navigate('proveedores.html')">
+                <i class="fas fa-truck"></i>
+                <h3>Proveedores</h3>
+                <p>Administra tus proveedores</p>
+                <button class="btn btn-primary mt-2">Acceder</button>
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        // Verificar token al cargar
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "index.html";
+        }
+
+        function navigate(page) {
+            window.location.href = page;
+        }
+
+        document.getElementById("cerrarSesion").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>
