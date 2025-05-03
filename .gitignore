@@ -13,3 +13,10 @@ FrontEndCorralon/build/
 *.log
 *.vs/
 .DS_Store
+
+# Ignorar archivos generados por Visual Studio
+.vs/
+*.suo
+*.user
+*.vsidx
+*.sqlite
