@@ -48,7 +48,7 @@ function asignarEventosPrincipales() {
 // Función para cargar datos iniciales
 async function cargarDatos(token) {
     try {
-        const response = await fetch(`${API_URL}/api/api/Clientes`, {
+        const response = await fetch(`${API_URL}/api/Clientes`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -157,7 +157,7 @@ async function guardarCliente(token) {
     };
 
     const method = id ? "PUT" : "POST";
-    const url = id ? `${API_URL}/api/api/Clientes/${id}` : `${API_URL}/api/api/Clientes`;
+    const url = id ? `${API_URL}/api/Clientes/${id}` : `${API_URL}/api/Clientes`;
 
     try {
         const response = await fetch(url, {
@@ -190,7 +190,7 @@ async function eliminarCliente(id, token) {
     if (!confirm("¿Estás seguro de eliminar este cliente?")) return;
 
     try {
-        const response = await fetch(`${API_URL}/api/api/Clientes/${id}`, {
+        const response = await fetch(`${API_URL}/api/Clientes/${id}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
         });
