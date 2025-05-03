@@ -3,8 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copiar el archivo .csproj y restaurar dependencias
-COPY *.csproj ./
-RUN dotnet restore
+COPY ApiCorralon.csproj ./
+RUN dotnet restore ApiCorralon.csproj
 
 # Copiar el resto del código y compilar
 COPY . ./
@@ -14,4 +14,4 @@ RUN dotnet publish -c Release -o /app/published
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/published .
-ENTRYPOINT ["dotnet", "BackEndCorralon.dll"]
+ENTRYPOINT ["dotnet", "ApiCorralon.dll"]
