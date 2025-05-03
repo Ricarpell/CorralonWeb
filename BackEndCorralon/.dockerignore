@@ -1,0 +1,18 @@
+# Ignorar archivos y carpetas generados por Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.vsidx
+*.sqlite
+
+# Ignorar archivos de configuración local
+appsettings.Development.json
+
+# Ignorar archivos temporales y de logs
+*.log
+*.tmp
+
+# Ignorar el propio Dockerfile (opcional, ya que se usa en la construcción)
+# Dockerfile
