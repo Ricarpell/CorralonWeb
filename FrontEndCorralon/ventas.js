@@ -871,7 +871,7 @@ async function guardarVentaEditada() {
 
     try {
         console.log("Enviando solicitud PUT...");
-        const response = await fetch(`${API_URL}/api/api/Ventas/${ventaIdEdicion}`, {
+        const response = await fetch(`${API_URL}/api/Ventas/${ventaIdEdicion}`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,
