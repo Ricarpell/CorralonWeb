@@ -142,7 +142,7 @@ namespace ApiCorralon.Services
             {
                 UsuarioId = ventaDto.UsuarioId,
                 ClienteId = ventaDto.ClienteId,
-                Fecha = DateTime.Now,
+                Fecha = DateTime.UtcNow, // Cambiado a UtcNow
                 Detalles = ventaDto.Detalles.Select(d => new DetalleVenta
                 {
                     ProductoId = d.ProductoId,
@@ -281,7 +281,7 @@ namespace ApiCorralon.Services
             // Actualizar la venta
             existingVenta.UsuarioId = ventaDto.UsuarioId;
             existingVenta.ClienteId = ventaDto.ClienteId;
-            // Preservar la fecha original (no se actualiza)
+            existingVenta.Fecha = existingVenta.Fecha.ToUniversalTime(); // Convertir a UTC si no lo está Preservar la fecha original (no se actualiza)
             // existingVenta.Fecha = DateTime.Now;
 
             // Actualizar detalles
