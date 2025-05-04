@@ -150,7 +150,7 @@ async function obtenerDatosReporte(token, fechaDesde, fechaHasta, productoId, us
     if (usuarioId) params.append("usuarioId", usuarioId);
     if (clienteId) params.append("clienteId", clienteId);
 
-    const url = `${API_URL}/api/Ventas?${params.toString()}`;
+    const url = `${API_URL}/api/Reportes/Ventas?${params.toString()}`;
     const response = await fetch(url, {
         headers: { "Authorization": `Bearer ${token}` }
     });
