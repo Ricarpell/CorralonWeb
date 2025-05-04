@@ -9,7 +9,10 @@ let sortColumnVentas = null;
 let sortDirectionVentas = 'asc';
 let carritoEdicion = [];
 let ventaIdEdicion = null;
-const API_URL = 'https://corralon-backend.onrender.com';
+const API_URL = window.location.hostname === "localhost" 
+    ? "http://localhost:5000" 
+    : "https://corralon-backend.onrender.com";
+
 
 // Decodificar token para obtener UsuarioId
 function getUsuarioIdFromToken(token) {

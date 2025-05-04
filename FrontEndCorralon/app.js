@@ -4,7 +4,11 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const submitBtn = event.target.querySelector("button[type='submit']");
-    const API_URL = 'https://corralon-backend.onrender.com';
+    const API_URL = window.location.hostname === "localhost" 
+    ? "http://localhost:5000" 
+    : "https://corralon-backend.onrender.com";
+
+
     // Mostrar estado de carga
     submitBtn.innerHTML = '<span class="loading-spinner"></span> Autenticando...';
     submitBtn.disabled = true;
