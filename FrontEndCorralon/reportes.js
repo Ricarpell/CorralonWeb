@@ -4,10 +4,7 @@ let productosLista = [];
 let clientesLista = [];
 let ultimoReporte = null;
 let printVentasChart = null; // Variable para el gráfico imprimible
-const API_URL = window.location.hostname === "localhost" 
-    ? "http://localhost:5000" 
-    : "https://corralon-backend.onrender.com";
-
+const API_URL = 'https://corralon-backend.onrender.com';
 
 /* Función principal de inicialización */
 function initReportes() {

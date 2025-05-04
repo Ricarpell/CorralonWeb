@@ -5,10 +5,6 @@ let productSort = { column: 'nombre', direction: 'asc' };
 let categorySort = { column: 'nombre', direction: 'asc' };
 let productFilter = '';
 let categoryFilter = '';
-const API_URL = window.location.hostname === "localhost" 
-    ? "http://localhost:5000" 
-    : "https://corralon-backend.onrender.com";
-
 
 const formatter = new Intl.NumberFormat('es-CL', {
     style: 'decimal',
@@ -93,6 +89,7 @@ function asignarEventosPrincipales() {
         });
     });
 }
+const API_URL = 'https://corralon-backend.onrender.com';
 
 async function cargarDatos(token) {
     try {

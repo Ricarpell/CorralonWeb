@@ -1,11 +1,7 @@
 // Variables del módulo
 const clientes = [];
 let isSubmitting = false;
-const API_URL = window.location.hostname === "localhost" 
-    ? "http://localhost:5000" 
-    : "https://corralon-backend.onrender.com";
-
-
+const API_URL = 'https://corralon-backend.onrender.com';
 
 // Función principal de inicialización
 function initClientes() {
