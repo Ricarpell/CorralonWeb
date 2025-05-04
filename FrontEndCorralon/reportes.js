@@ -203,6 +203,7 @@ function formatearMoneda(valor) {
 /* Mostrar resultados */
 function mostrarResultados(reporte) {
     ultimoReporte = reporte;
+    console.log("Mostrando resultados:", reporte); // Depuración
 
     document.getElementById("totalVentas").textContent = formatearMoneda(reporte.totalVentas);
     document.getElementById("totalProductos").textContent = reporte.totalProductosVendidos.toLocaleString();
@@ -211,6 +212,7 @@ function mostrarResultados(reporte) {
     document.getElementById("productoDestacado").textContent = reporte.productoMasVendido;
 
     const tbody = document.getElementById("detalleVentas").querySelector("tbody");
+    if (!tbody) console.error("Tabla #detalleVentas no encontrada"); // Depuración
     tbody.innerHTML = reporte.ventas.map(venta => `
         <tr>
             <td>${venta.fecha ? new Date(venta.fecha).toLocaleDateString('es-CL') : 'N/A'}</td>
@@ -642,6 +644,7 @@ function exportarExcel() {
 /* Generar reporte */
 async function generarReporte(token) {
     const filtros = obtenerValoresFiltros();
+    console.log("Filtros aplicados:", filtros); // Depuración
     try {
         const reporte = await obtenerDatosReporte(
             token,
@@ -651,6 +654,7 @@ async function generarReporte(token) {
             filtros.usuarioId,
             filtros.clienteId
         );
+        console.log("Datos del reporte:", reporte); // Depuración
         mostrarResultados(reporte);
         mostrarNotificacion("Reporte generado con éxito", "success");
     } catch (error) {
