@@ -871,7 +871,7 @@ async function guardarVentaEditada() {
 
     try {
         console.log("Enviando solicitud PUT...");
-        const response = await fetch(`${API_URL}/api/Ventas/${ventaIdEdicion}`, {
+        const response = await fetch(`${API_URL}/api/Ventas/${ventaIdEdicion}`, { // Corrección: Eliminado /api duplicado
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -880,18 +880,23 @@ async function guardarVentaEditada() {
             body: JSON.stringify(requestBody)
         });
 
-        console.log(`Respuesta PUT /api/Ventas/${ventaIdEdicion}:`, response.status, response.statusText);
+        console.log("Respuesta PUT /api/Ventas/${ventaIdEdicion}:", response.status, response.statusText);
 
         if (!response.ok) {
             let errorMessage = "Error al actualizar la venta";
             try {
-                const errorData = await response.json();
-                errorMessage = errorData.Message || errorData.message || errorMessage;
-            } catch (jsonError) {
-                // Manejar respuesta no JSON
-                const errorText = await response.text();
-                console.error("Respuesta de error no es JSON:", errorText);
-                errorMessage = errorText || errorMessage;
+                // Leer el cuerpo solo una vez como texto
+                const errorBody = await response.text();
+                try {
+                    // Intentar parsear como JSON
+                    const errorData = JSON.parse(errorBody);
+                    errorMessage = errorData.Message || errorData.message || errorMessage;
+                } catch {
+                    // Si no es JSON, usar el texto directamente
+                    errorMessage = errorBody || errorMessage;
+                }
+            } catch (error) {
+                console.error("Error al leer el cuerpo de la respuesta:", error);
             }
             throw new Error(errorMessage);
         }
