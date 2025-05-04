@@ -2,7 +2,7 @@ const productos = [];
 const categorias = [];
 let isSubmitting = false;
 let productSort = { column: 'nombre', direction: 'asc' };
-let categorySort = { column: 'nombre', direction: 'asc' };
+let categorySort = { column paint: 'nombre', direction: 'asc' };
 let productFilter = '';
 let categoryFilter = '';
 
@@ -31,19 +31,20 @@ function initAdmin() {
 function asignarEventosPrincipales() {
     document.getElementById("nuevaCategoriaBtn")?.addEventListener("click", () => abrirModalCategoria());
     document.getElementById("nuevoProductoBtn")?.addEventListener("click", () => abrirModalProducto());
-    
+    document.getElementById("nuevaCategoriaDesdeProducto")?.addEventListener("click", () => abrirModalCategoria());
+
     const formCategoria = document.getElementById("formCategoria");
     formCategoria?.addEventListener("submit", (e) => {
         e.preventDefault();
         if (!isSubmitting) guardarCategoria(localStorage.getItem("token"));
     }, { once: false });
-    
+
     const formProducto = document.getElementById("formProducto");
     formProducto?.addEventListener("submit", (e) => {
         e.preventDefault();
         if (!isSubmitting) guardarProducto(localStorage.getItem("token"));
     }, { once: false });
-    
+
     document.querySelectorAll('.close-modal').forEach(btn => {
         btn.addEventListener('click', () => {
             const modal = btn.closest('.modal');
@@ -51,7 +52,6 @@ function asignarEventosPrincipales() {
         });
     });
 
-    // Event listeners for filtering
     document.getElementById("productoSearch")?.addEventListener("input", (e) => {
         productFilter = e.target.value.toLowerCase();
         renderizarProductos();
@@ -62,7 +62,6 @@ function asignarEventosPrincipales() {
         renderizarCategorias();
     });
 
-    // Event listeners for sorting
     document.querySelectorAll("#listaProductos thead th[data-sort]").forEach(header => {
         header.addEventListener("click", () => {
             const column = header.dataset.sort;
@@ -89,6 +88,7 @@ function asignarEventosPrincipales() {
         });
     });
 }
+
 const API_URL = 'https://corralon-backend.onrender.com';
 
 async function cargarDatos(token) {
@@ -156,7 +156,6 @@ function renderizarProductos() {
     const tbody = document.querySelector("#listaProductos tbody");
     tbody.innerHTML = "";
 
-    // Filter products
     const filteredProductos = productos.filter(producto =>
         producto.nombre.toLowerCase().includes(productFilter)
     );
@@ -166,7 +165,6 @@ function renderizarProductos() {
         return;
     }
 
-    // Sort products
     const sortedProductos = sortItems(filteredProductos, productSort, (producto, column) => {
         if (column === 'categoria') {
             const categoria = categorias.find(c => c.id === producto.categoriaId) || { nombre: "Sin categoría" };
@@ -175,7 +173,6 @@ function renderizarProductos() {
         return producto[column] || 0;
     });
 
-    // Update header sort indicators
     document.querySelectorAll("#listaProductos thead th[data-sort]").forEach(header => {
         header.classList.remove('sort-asc', 'sort-desc');
         if (header.dataset.sort === productSort.column) {
@@ -210,7 +207,6 @@ function renderizarCategorias() {
     const tbody = document.querySelector("#listaCategorias tbody");
     tbody.innerHTML = "";
 
-    // Filter categories
     const filteredCategorias = categorias.filter(categoria =>
         categoria.nombre.toLowerCase().includes(categoryFilter)
     );
@@ -220,7 +216,6 @@ function renderizarCategorias() {
         return;
     }
 
-    // Sort categories
     const sortedCategorias = sortItems(filteredCategorias, categorySort, (categoria, column) => {
         if (column === 'productos') {
             return productos.filter(p => p.categoriaId === categoria.id).length;
@@ -228,7 +223,6 @@ function renderizarCategorias() {
         return categoria[column];
     });
 
-    // Update header sort indicators
     document.querySelectorAll("#listaCategorias thead th[data-sort]").forEach(header => {
         header.classList.remove('sort-asc', 'sort-desc');
         if (header.dataset.sort === categorySort.column) {
@@ -380,6 +374,16 @@ async function guardarCategoria(token) {
 
         await cargarDatos(token);
         document.getElementById("modalCategoria").classList.remove("show");
+        // Mantener el modal de producto abierto y actualizar el select de categorías
+        const modalProducto = document.getElementById("modalProducto");
+        if (modalProducto.classList.contains("show")) {
+            llenarSelectCategorias();
+            // Seleccionar la nueva categoría si fue creada
+            const nuevaCategoria = categorias.find(c => c.nombre === nombre);
+            if (nuevaCategoria) {
+                document.getElementById("productoCategoria").value = nuevaCategoria.id;
+            }
+        }
         mostrarNotificacion(`Categoría ${id ? 'actualizada' : 'creada'} con éxito`, "success");
     } catch (error) {
         console.error("Error al guardar categoría:", error);
