@@ -133,7 +133,7 @@ namespace ApiCorralon.Services
                 }
                 if (detalle.Cantidad > producto.Stock)
                 {
-                    throw new ArgumentException($"No hay suficiente stock para el producto con ID {detalle.ProductoId}. Stock disponible: {producto.Stock}.");
+                    throw new ArgumentException($"No hay suficiente stock para el producto con ID {detalle.ProductoId}. Stock disponible: {producto.Stock}");
                 }
             }
 
@@ -171,7 +171,12 @@ namespace ApiCorralon.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch
+            catch (DbUpdateException ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception($"Error al guardar la venta: {ex.InnerException?.Message ?? ex.Message}", ex);
+            }
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -189,7 +194,7 @@ namespace ApiCorralon.Services
                 Total = venta.Total,
                 Detalles = venta.Detalles.Select(d => new DetalleVentaRespuestaDto
                 {
-                    ProductoId = d.ProductoId, // Añadido
+                    ProductoId = d.ProductoId,
                     ProductoNombre = _context.Productos.FirstOrDefault(p => p.Id == d.ProductoId)?.Nombre,
                     Cantidad = d.Cantidad,
                     PrecioUnitario = d.PrecioUnitario,
@@ -259,7 +264,7 @@ namespace ApiCorralon.Services
                 }
                 if (detalle.Cantidad > producto.Stock)
                 {
-                    throw new ArgumentException($"No hay suficiente stock para el producto con ID {detalle.ProductoId}. Stock disponible: {producto.Stock}.");
+                    throw new ArgumentException($"No hay suficiente stock para el producto con ID {detalle.ProductoId}. Stock disponible: {producto.Stock}");
                 }
             }
 
@@ -276,7 +281,7 @@ namespace ApiCorralon.Services
             // Actualizar la venta
             existingVenta.UsuarioId = ventaDto.UsuarioId;
             existingVenta.ClienteId = ventaDto.ClienteId;
-            // Preservar la fecha original
+            // Preservar la fecha original (no se actualiza)
             // existingVenta.Fecha = DateTime.Now;
 
             // Actualizar detalles
@@ -307,7 +312,12 @@ namespace ApiCorralon.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch
+            catch (DbUpdateException ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception($"Error al actualizar la venta: {ex.InnerException?.Message ?? ex.Message}", ex);
+            }
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -325,7 +335,7 @@ namespace ApiCorralon.Services
                 Total = existingVenta.Total,
                 Detalles = existingVenta.Detalles.Select(d => new DetalleVentaRespuestaDto
                 {
-                    ProductoId = d.ProductoId, // Añadido
+                    ProductoId = d.ProductoId,
                     ProductoNombre = _context.Productos.FirstOrDefault(p => p.Id == d.ProductoId)?.Nombre,
                     Cantidad = d.Cantidad,
                     PrecioUnitario = d.PrecioUnitario,
