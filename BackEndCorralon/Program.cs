@@ -95,7 +95,7 @@ builder.Services.AddCors(options =>
                "http://127.0.0.1:5500" // Alternativa para Live Server
            )
            .AllowAnyHeader()
-           .AllowAnyMethod()
+           .AllowAnyMethod();
     });
 });
 
