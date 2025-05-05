@@ -89,9 +89,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://corralon-frontend.onrender.com")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+               "https://corralon-frontend.onrender.com",
+               "http://localhost:5500", // Para Live Server
+               "http://127.0.0.1:5500" // Alternativa para Live Server
+           )
+           .AllowAnyHeader()
+           .AllowAnyMethod()
+           .AllowCredentials(); // Si usas cookies o autenticación
     });
 });
 
