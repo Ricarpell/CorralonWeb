@@ -109,28 +109,33 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    Console.WriteLine("Swagger configurado en Development");
-}
-else
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCorralon v1");
-        options.RoutePrefix = "swagger";
-        options.DocumentTitle = "ApiCorralon API";
-    });
-    Console.WriteLine("Swagger configurado en Production");
-}
+//// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//    Console.WriteLine("Swagger configurado en Development");
+//}
+//else
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(options =>
+//    {
+//        options.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCorralon v1");
+//        options.RoutePrefix = "swagger";
+//        options.DocumentTitle = "ApiCorralon API";
+//    });
+//    Console.WriteLine("Swagger configurado en Production");
+//}
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
-
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCorralon v1");
+    c.RoutePrefix = "swagger"; // Asegura que la URL sea /swagger
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
