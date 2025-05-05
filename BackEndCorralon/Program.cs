@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args,
     EnvironmentName = Environments.Development // Forzar Development
 });
-
+Console.WriteLine($"Entorno actual: {builder.Environment.EnvironmentName}");
 // Add services to the container.
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ProductoService>();
@@ -114,6 +114,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    Console.WriteLine("Swagger configurado en Development");
 }
 else
 {
@@ -124,6 +125,7 @@ else
         options.RoutePrefix = "swagger";
         options.DocumentTitle = "ApiCorralon API";
     });
+    Console.WriteLine("Swagger configurado en Production");
 }
 
 app.UseHttpsRedirection();
