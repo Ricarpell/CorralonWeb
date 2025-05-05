@@ -96,7 +96,6 @@ builder.Services.AddCors(options =>
            )
            .AllowAnyHeader()
            .AllowAnyMethod()
-           .AllowCredentials(); // Si usas cookies o autenticación
     });
 });
 
