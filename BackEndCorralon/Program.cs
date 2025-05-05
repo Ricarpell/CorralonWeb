@@ -8,8 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Diagnostics;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    EnvironmentName = Environments.Development // Forzar Development
+});
 
 // Add services to the container.
 builder.Services.AddScoped<AuthService>();
