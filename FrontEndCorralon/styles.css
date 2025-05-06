@@ -362,7 +362,7 @@ body {
 
 .admin-table th, .productos-table th {
     background-color: #f8f9fa;
-    padding: 12px 15px;
+    padding: 1px 15px;
     text-align: left;
     font-weight: 600;
     color: var(--primary);
@@ -370,7 +370,7 @@ body {
 }
 
 .admin-table td, .productos-table td {
-    padding: 12px 15px;
+    padding: 1px 15px;
     border-bottom: 1px solid #eee;
     vertical-align: middle;
 }
