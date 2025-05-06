@@ -1376,4 +1376,20 @@ body {
         height: auto;
     }
 }
-
+body {
+    position: relative;
+    min-height: 100vh;
+}
+body::after {   
+    content: "";
+    background: url('./images/Logoceleste.png') no-repeat center center; /* Centra la imagen */
+    background-size: 50%; /* Tamaño relativo al viewport (ajústalo) */
+    opacity: 0.2; /* Transparencia (0.05 a 0.3) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999; /* Encima de todo */
+    pointer-events: none; /* Permite interactuar con elementos debajo */
+}
