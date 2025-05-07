@@ -7,7 +7,19 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
     const API_URL = window.location.hostname === "localhost" 
     ? "http://localhost:5000" 
     : "https://corralon-backend.onrender.com";
-
+    const passwordInput = document.getElementById("password");
+    const capsLockWarning = document.getElementById("capsLockWarning");
+    
+    passwordInput.addEventListener("keyup", (event) => {
+        const isCapsLockOn = event.getModifierState && event.getModifierState("CapsLock");
+        capsLockWarning.style.display = isCapsLockOn ? "block" : "none";
+    });
+    
+    // También detectar al hacer clic o enfocar el campo
+    passwordInput.addEventListener("focus", () => {
+        const event = new KeyboardEvent("keyup");
+        passwordInput.dispatchEvent(event);
+    });
 
     
     // Mostrar estado de carga

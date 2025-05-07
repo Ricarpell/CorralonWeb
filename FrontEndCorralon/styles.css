@@ -1393,3 +1393,15 @@ body::after {
     z-index: 9999; /* Encima de todo */
     pointer-events: none; /* Permite interactuar con elementos debajo */
 }
+.caps-lock-warning {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.caps-lock-warning i {
+    font-size: 1rem;
+}
