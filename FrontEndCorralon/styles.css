@@ -1405,3 +1405,27 @@ body::after {
 .caps-lock-warning i {
     font-size: 1rem;
 }
+.login-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.login-notification.error {
+    background-color: #e74c3c; /* Rojo para errores */
+}
+
+.login-notification.success {
+    background-color: #2ecc71; /* Verde para éxito */
+}
+
+.login-notification.show {
+    opacity: 1;
+}

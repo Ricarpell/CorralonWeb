@@ -35,12 +35,13 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
                 contraseña: password 
             })
         });
-
+    
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || "Credenciales incorrectas");
+            // Mostrar mensaje específico para credenciales incorrectas
+            throw new Error(errorData.message || "Usuario o contraseña incorrectos");
         }
-
+    
         const data = await response.json();
         localStorage.setItem("token", data.token);
         
@@ -51,9 +52,10 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
         setTimeout(() => {
             window.location.href = "dashboard.html";
         }, 1500);
-
+    
     } catch (error) {
         console.error("Error en login:", error);
+        // Usar mostrarNotificacion para errores, manteniendo el estilo
         mostrarNotificacion(error.message || "Error al iniciar sesión", "error");
         
         // Restaurar botón
