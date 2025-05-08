@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Sistema de Ventas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">VentasPlus</div>
+            <button id="cerrarSesion" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Gestión de Usuarios</h1>
+        <p>Administra los usuarios del sistema (crear y modificar).</p>
+
+        <!-- Formulario para crear usuario -->
+        <div class="card mb-4">
+            <h2>Crear Nuevo Usuario</h2>
+            <form id="createUserForm" class="login-form">
+                <div class="form-group">
+                    <label for="createUsername" class="form-label">Nombre de Usuario</label>
+                    <input type="text" id="createUsername" class="form-control" placeholder="Ingresa el nombre de usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="createPassword" class="form-label">Contraseña</label>
+                    <input type="password" id="createPassword" class="form-control" placeholder="Ingresa la contraseña" required>
+                </div>
+                <div class="form-group">
+                    <label for="createRole" class="form-label">Rol</label>
+                    <select id="createRole" class="form-control" required>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Crear Usuario</button>
+            </form>
+        </div>
+
+        <!-- Lista de usuarios -->
+        <div class="card">
+            <h2>Lista de Usuarios</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre de Usuario</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para modificar usuario -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2>Modificar Usuario</h2>
+            <form id="editUserForm" class="login-form">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label for="editUsername" class="form-label">Nombre de Usuario</label>
+                    <input type="text" id="editUsername" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword" class="form-label">Nueva Contraseña (opcional)</label>
+                    <input type="password" id="editPassword" class="form-control" placeholder="Ingresa nueva contraseña">
+                </div>
+                <div class="form-group">
+                    <label for="editRole" class="form-label">Rol</label>
+                    <select id="editRole" class="form-control" required>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="usuarios.js"></script>
+</body>
+</html>

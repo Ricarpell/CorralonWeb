@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-   
 </head>
 <body>
     <header class="header">
@@ -54,30 +53,40 @@
                 <button class="btn btn-primary mt-2">Acceder</button>
             </div>
 
-            <!-- Nueva tarjeta para Compras -->
-            <!-- <div class="dashboard-card" onclick="navigate('compras.html')">
-                <i class="fas fa-shopping-bag"></i>
-                <h3>Compras</h3>
-                <p>Gestiona las compras y el inventario</p>
+            <div class="dashboard-card" onclick="navigate('usuarios.html')">
+                <i class="fas fa-user-cog"></i>
+                <h3>Gestión de Usuarios</h3>
+                <p>Administra usuarios y roles</p>
                 <button class="btn btn-primary mt-2">Acceder</button>
-            </div> -->
-
-            <!-- Nueva tarjeta para Proveedores -->
-            <!-- <div class="dashboard-card" onclick="navigate('proveedores.html')">
-                <i class="fas fa-truck"></i>
-                <h3>Proveedores</h3>
-                <p>Administra tus proveedores</p>
-                <button class="btn btn-primary mt-2">Acceder</button>
-            </div> -->
+            </div>
         </div>
     </div>
 
     <script>
-        // Verificar token al cargar
+        // Verificar token y rol al cargar
         const token = localStorage.getItem("token");
         if (!token) {
             window.location.href = "index.html";
         }
+
+        // Decodificar token para obtener el rol
+        function getUserRole() {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || '';
+            } catch (e) {
+                return '';
+            }
+        }
+
+        // Mostrar u ocultar la tarjeta de Gestión de Usuarios según el rol
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = getUserRole();
+            const userManagementCard = document.querySelector('.dashboard-card[onclick="navigate(\'usuarios.html\')"]');
+            if (userRole !== 'Admin') {
+                userManagementCard.style.display = 'none';
+            }
+        });
 
         function navigate(page) {
             window.location.href = page;
