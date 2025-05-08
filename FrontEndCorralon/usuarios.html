@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
     <title>Gestión de Usuarios - Sistema de Ventas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -11,84 +11,125 @@
 <body>
     <header class="header">
         <div class="container header-content">
-            <div class="logo">VentasPlus</div>
-            <button id="cerrarSesion" class="btn btn-danger">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
+            <div class="logo">Gestión de Usuarios</div>
+            <div>
+                <button id="volverDashboard" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button id="cerrarSesion" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="container">
-        <h1>Gestión de Usuarios</h1>
-        <p>Administra los usuarios del sistema (crear y modificar).</p>
+    <main class="container admin-container">
+        <section class="admin-section">
+            <div class="admin-actions">
+                <button id="crearUsuarioBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Usuario
+                </button>
+            </div>
+            <h2 class="section-title">
+                <i class="fas fa-users"></i> Usuarios
+            </h2>
+            <div class="table-container">
+                <table id="usersTable" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
+        </section>
 
-        <!-- Formulario para crear usuario -->
-        <div class="card mb-4">
-            <h2>Crear Nuevo Usuario</h2>
-            <form id="createUserForm" class="login-form">
-                <div class="form-group">
-                    <label for="createUsername" class="form-label">Nombre de Usuario</label>
-                    <input type="text" id="createUsername" class="form-control" placeholder="Ingresa el nombre de usuario" required>
+        <!-- Modal para Editar/Crear Usuario -->
+        <div id="editUserModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-user"></i> <span id="modalUserTitle">Editar Usuario</span>
+                    </h3>
+                    <button class="close close-modal">×</button>
                 </div>
-                <div class="form-group">
-                    <label for="createPassword" class="form-label">Contraseña</label>
-                    <input type="password" id="createPassword" class="form-control" placeholder="Ingresa la contraseña" required>
-                </div>
-                <div class="form-group">
-                    <label for="createRole" class="form-label">Rol</label>
-                    <select id="createRole" class="form-control" required>
-                        <option value="Admin">Admin</option>
-                        <option value="User">User</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Crear Usuario</button>
-            </form>
+                <form id="editUserForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="editUserId">
+                        <div class="form-group">
+                            <label for="editUsername" class="form-label">Nombre de Usuario</label>
+                            <input type="text" id="editUsername" class="form-control" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="editPassword" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editRole" class="form-label">Rol</label>
+                            <select id="editRole" class="form-control" required>
+                                <option value="Admin">Admin</option>
+                                <option value="User">User</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <!-- Lista de usuarios -->
-        <div class="card">
-            <h2>Lista de Usuarios</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre de Usuario</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTableBody"></tbody>
-            </table>
+        <!-- Modal para Crear Usuario -->
+        <div id="createUserModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-user-plus"></i> Nuevo Usuario
+                    </h3>
+                    <button class="close close-modal">×</button>
+                </div>
+                <form id="createUserForm">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="createUsername" class="form-label">Nombre de Usuario</label>
+                            <input type="text" id="createUsername" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="createPassword" class="form-label">Contraseña</label>
+                            <input type="password" id="createPassword" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="createRole" class="form-label">Rol</label>
+                            <select id="createRole" class="form-control" required>
+                                <option value="Admin">Admin</option>
+                                <option value="User">User</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-
-    <!-- Modal para modificar usuario -->
-    <div id="editUserModal" class="modal">
-        <div class="modal-content">
-            <span class="close">×</span>
-            <h2>Modificar Usuario</h2>
-            <form id="editUserForm" class="login-form">
-                <input type="hidden" id="editUserId">
-                <div class="form-group">
-                    <label for="editUsername" class="form-label">Nombre de Usuario</label>
-                    <input type="text" id="editUsername" class="form-control" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="editPassword" class="form-label">Nueva Contraseña (opcional)</label>
-                    <input type="password" id="editPassword" class="form-control" placeholder="Ingresa nueva contraseña">
-                </div>
-                <div class="form-group">
-                    <label for="editRole" class="form-label">Rol</label>
-                    <select id="editRole" class="form-control" required>
-                        <option value="Admin">Admin</option>
-                        <option value="User">User</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Guardar Cambios</button>
-            </form>
-        </div>
-    </div>
+    </main>
 
     <script src="usuarios.js"></script>
+    <script>
+        document.getElementById("volverDashboard").addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+
+        document.getElementById("cerrarSesion").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        });
+    </script>
 </body>
 </html>

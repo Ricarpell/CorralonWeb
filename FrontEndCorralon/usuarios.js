@@ -79,8 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Guardando...';
 
         try {
-            console.log(`Enviando PUT a ${API_URL}/api/Usuarios/${id} con cuerpo:`, { contraseña: password, rol: role });
-            const response = await fetch(`${API_URL}/api/Usuarios/${id}`, {
+            // Intentar con la URL principal
+            let url = `${API_URL}/api/Usuarios/${id}`;
+            console.log(`Enviando PUT a ${url} con cuerpo:`, { contraseña: password, rol: role });
+            let response = await fetch(url, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -88,6 +90,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ contraseña: password, rol: role })
             });
+
+            // Intentar URLs alternativas si falla
+            if (response.status === 404) {
+                url = `${API_URL}/api/Usuarios/update/${id}`;
+                console.log(`Reintentando PUT a ${url} debido a 404`);
+                response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ contraseña: password, rol: role })
+                });
+            }
 
             console.log(`Respuesta PUT: Status=${response.status}, StatusText=${response.statusText}, Headers:`, [...response.headers]);
             if (!response.ok) {
@@ -135,6 +151,34 @@ document.addEventListener("DOMContentLoaded", () => {
             modal.style.display = "none";
         }
     };
+
+    // Configurar modal de creación
+    const createModal = document.getElementById("createUserModal");
+    if (!createModal) {
+        console.error("Elemento #createUserModal no encontrado en el DOM");
+    }
+    const createCloseBtn = createModal?.querySelector(".close");
+    if (createCloseBtn) {
+        createCloseBtn.onclick = () => {
+            console.log("Cerrando modal de creación mediante botón de cierre");
+            createModal.style.display = "none";
+        };
+    }
+    window.onclick = (event) => {
+        if (event.target === createModal) {
+            console.log("Cerrando modal de creación al hacer clic fuera");
+            createModal.style.display = "none";
+        }
+    };
+
+    // Configurar botón de nuevo usuario
+    document.getElementById("crearUsuarioBtn")?.addEventListener("click", () => {
+        const createModal = document.getElementById("createUserModal");
+        if (createModal) {
+            createModal.style.display = "block";
+            document.getElementById("createUserForm").reset();
+        }
+    });
 });
 
 // Cargar usuarios
@@ -162,7 +206,7 @@ async function loadUsers() {
         tbody.innerHTML = "";
 
         users.forEach(user => {
-            const rol = user.rol || user.Rol || user.role || "Sin rol";
+            const rol = user.rol || user.Rol || user.role || "Sin rol definido";
             console.log(`Procesando usuario: ID=${user.id}, Nombre=${user.nombre}, Rol=${rol}`);
             if (!user.rol && !user.Rol && !user.role) {
                 console.warn(`Advertencia: El campo 'rol' no está presente en el usuario ID=${user.id}`);
@@ -202,7 +246,7 @@ function openEditModal(id, username, role) {
 
     editUserId.value = id;
     editUsername.value = username;
-    editRole.value = role === "Sin rol" ? "User" : role;
+    editRole.value = role === "Sin rol definido" ? "User" : role;
     editPassword.value = "";
     modal.style.display = "block";
     console.log("Modal establecido a display: block");
