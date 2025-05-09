@@ -23,6 +23,22 @@ body {
     background-color: #f5f7fa;
     color: var(--dark);
     line-height: 1.6;
+    position: relative;
+    min-height: 100vh;
+}
+
+body::after {   
+    content: "";
+    background: url('./images/Logoceleste.png') no-repeat center center;
+    background-size: 50%;
+    opacity: 0.2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    pointer-events: none;
 }
 
 /* Layout */
@@ -126,6 +142,27 @@ body {
 
 .btn-secondary:hover {
     background-color: #5a6268;
+}
+
+.btn-info {
+    background-color: var(--info);
+    color: var(--white);
+}
+
+.btn-info:hover {
+    background-color: #3a9177;
+}
+
+.btn-warning {
+    background-color: #4361ee;
+    border-color: #4361ee;
+    color: white;
+    margin-left: 5px;
+}
+
+.btn-warning:hover {
+    background-color: #3f37c9;
+    border-color: #3f37c9;
 }
 
 .btn-sm {
@@ -340,7 +377,7 @@ body {
 /* Ventas */
 .filtros-ventas {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
@@ -464,9 +501,7 @@ body {
 
 /* Modales */
 .modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: none; /* Cambio: Usar display: none en lugar de opacity y visibility */
     position: fixed;
     top: 0;
     left: 0;
@@ -474,14 +509,13 @@ body {
     height: 100%;
     background: rgba(0,0,0,0.5);
     z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
+    justify-content: center;
+    align-items: center;
     transition: all 0.3s ease;
 }
 
 .modal.show {
-    opacity: 1;
-    visibility: visible;
+    display: flex; /* Cambio: Mostrar con display: flex cuando tiene clase .show */
 }
 
 .modal-content {
@@ -810,17 +844,17 @@ body {
 
 #listaProductos.admin-table th:nth-child(1),
 #listaProductos.admin-table td:nth-child(1) {
-    min-width: 200px; /* Columna Nombre más ancha */
+    min-width: 200px;
 }
 
 #listaProductos.admin-table th:nth-child(2),
 #listaProductos.admin-table td:nth-child(2) {
-    min-width: 150px; /* Columna Categoría */
+    min-width: 150px;
 }
 
 #listaProductos.admin-table th:nth-child(5),
 #listaProductos.admin-table td:nth-child(5) {
-    min-width: 120px; /* Columna Acciones */
+    min-width: 120px;
 }
 
 /* Ajustar anchos mínimos para columnas de la tabla de categorías */
@@ -831,12 +865,12 @@ body {
 
 #listaCategorias.admin-table th:nth-child(1),
 #listaCategorias.admin-table td:nth-child(1) {
-    min-width: 200px; /* Columna Nombre más ancha */
+    min-width: 200px;
 }
 
 #listaCategorias.admin-table th:nth-child(3),
 #listaCategorias.admin-table td:nth-child(3) {
-    min-width: 120px; /* Columna Acciones */
+    min-width: 120px;
 }
 
 /* Nuevos estilos para alinear cantidades a la derecha */
@@ -847,10 +881,10 @@ body {
     text-align: right;
 }
 
-#listaVentas td:nth-child(3), /* Total */
-#detalleVentaProductos td:nth-child(2), /* Cantidad */
-#detalleVentaProductos td:nth-child(3), /* Precio Unitario */
-#detalleVentaProductos td:nth-child(4) /* Subtotal */ {
+#listaVentas td:nth-child(3),
+#detalleVentaProductos td:nth-child(2),
+#detalleVentaProductos td:nth-child(3),
+#detalleVentaProductos td:nth-child(4) {
     text-align: right;
 }
 
@@ -871,207 +905,24 @@ body {
 }
 
 /* Estilos para alinear los encabezados y el contenido de la tabla de historial de ventas */
-#listaVentas th:nth-child(1), /* ID */
+#listaVentas th:nth-child(1),
 #listaVentas td:nth-child(1) {
     text-align: right;
 }
 
-#listaVentas th:nth-child(2), /* Fecha */
+#listaVentas th:nth-child(2),
 #listaVentas td:nth-child(2) {
     text-align: left;
 }
 
-#listaVentas th:nth-child(3), /* Total */
+#listaVentas th:nth-child(3),
 #listaVentas td:nth-child(3) {
     text-align: right;
 }
 
-#listaVentas th:nth-child(4), /* Acciones */
+#listaVentas th:nth-child(4),
 #listaVentas td:nth-child(4) {
     text-align: left;
-}
-
-
-/* Layout */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Buttons */
-.btn {
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    border-radius: 50px;
-    font-weight: 500;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-}
-
-.btn-primary {
-    background-color: var(--primary);
-    color: var(--white);
-}
-
-.btn-primary:hover {
-    background-color: var(--secondary);
-    transform: translateY(-2px);
-}
-
-.btn-danger {
-    background-color: var(--danger);
-    color: var(--white);
-}
-
-.btn-danger:hover {
-    background-color: #d91a6d;
-}
-
-.btn-success {
-    background-color: var(--success);
-    color: var(--white);
-}
-
-.btn-success:hover {
-    background-color: #3ab4d9;
-}
-
-.btn-secondary {
-    background-color: var(--gray);
-    color: var(--white);
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-.btn-info {
-    background-color: var(--info);
-    color: var(--white);
-}
-
-.btn-info:hover {
-    background-color: #3a9177;
-}
-
-.btn-sm {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.9rem;
-}
-
-.btn-block {
-    display: block;
-    width: 100%;
-}
-
-
-
-/* Ventas */
-.filtros-ventas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-/* Botones de acción en filtros */
-.form-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 1rem;
-    justify-content: flex-start;
-}
-
-/* Reportes */
-.reporte-totales {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin: 1.5rem 0;
-}
-
-.total-card {
-    background: var(--white);
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.total-card i {
-    font-size: 2rem;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
-}
-
-.total-card h4 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.total-card p {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--dark);
-}
-
-/* Sección imprimible */
-.printable-report {
-    display: none;
-}
-
-@media print {
-    body * {
-        visibility: hidden;
-    }
-    .printable-report, .printable-report * {
-        visibility: visible;
-    }
-    .printable-report {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        padding: 20px;
-    }
-    .admin-table {
-        width: 100%;
-        font-size: 12pt;
-    }
-    .admin-table th, .admin-table td {
-        border: 1px solid #000;
-        padding: 8px;
-    }
-}
-  /* Estilos específicos para login */
-
-.login-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 450px;
-    padding: 2.5rem;
-    text-align: center;
-    transform: translateY(20px);
-    opacity: 0;
-    animation: fadeInUp 0.5s 0.3s forwards;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* Efecto de onda en el botón */
@@ -1103,106 +954,16 @@ body {
         transform: scale(0, 0);
         opacity: 1;
     }
-
     20% {
         transform: scale(25, 25);
         opacity: 1;
     }
-
     100% {
         opacity: 0;
         transform: scale(40, 40);
     }
 }
- /* Estilos específicos del dashboard */
- .dashboard-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
 
-.dashboard-card {
-    background: white;
-    border-radius: 10px;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-card i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-}
-
-.dashboard-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.dashboard-card p {
-    color: var(--gray);
-}
-
-.welcome-message {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.welcome-message h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary);
-}
-
-.welcome-message p {
-    font-size: 1.1rem;
-    color: var(--gray);
-}
-/* Hacer que los encabezados sean visualmente clicables */
-#listaProductos thead th {
-    cursor: pointer;
-    position: relative;
-    user-select: none;
-}
-
-/* Estilo para la columna ordenada */
-#listaProductos thead th.sort-asc::after,
-#listaProductos thead th.sort-desc::after {
-    content: '';
-    display: inline-block;
-    margin-left: 5px;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-}
-
-#listaProductos thead th.sort-asc::after {
-    border-bottom: 5px solid #333; /* Flecha hacia arriba para orden ascendente */
-}
-
-#listaProductos thead th.sort-desc::after {
-    border-top: 5px solid #333; /* Flecha hacia abajo para orden descendente */
-}
-
-/* Hover para indicar interactividad */
-#listaProductos thead th:hover {
-    background-color: #f1f1f1;
-}
-
-/* Asegurar que la última columna (Acciones) no sea clickable */
-#listaProductos thead th:last-child {
-    cursor: default;
-}
 /* Hacer que los encabezados sean visualmente clicables */
 #listaProductos thead th,
 #historialVentas thead th {
@@ -1227,12 +988,12 @@ body {
 
 #listaProductos thead th.sort-asc::after,
 #historialVentas thead th.sort-asc::after {
-    border-bottom: 5px solid #333; /* Flecha hacia arriba para orden ascendente */
+    border-bottom: 5px solid #333;
 }
 
 #listaProductos thead th.sort-desc::after,
 #historialVentas thead th.sort-desc::after {
-    border-top: 5px solid #333; /* Flecha hacia abajo para orden descendente */
+    border-top: 5px solid #333;
 }
 
 /* Hover para indicar interactividad */
@@ -1246,62 +1007,6 @@ body {
 #historialVentas thead th:last-child {
     cursor: default;
 }
-/* Estilos existentes para ordenación */
-
-#listaProductos thead th.sort-asc::after,
-#historialVentas thead th.sort-asc::after {
-    border-bottom: 5px solid #333;
-}
-
-#listaProductos thead th.sort-desc::after,
-#historialVentas thead th.sort-desc::after {
-    border-top: 5px solid #333;
-}
-
-#listaProductos thead th:hover,
-#historialVentas thead th:hover {
-    background-color: #f1f1f1;
-}
-
-
-/* Estilo para el botón Editar */
-.btn-warning {
-    background-color:#4361ee;
-    border-color:#4361ee;
-    color:white;
-    margin-left: 5px;
-}
-
-.btn-warning:hover {
-    background-color: #3f37c9;
-    border-color: #3f37c9;
-}
-
-/* Asegurar que el modal de edición sea consistente */
-#modalEditarVenta .modal-content {
-    max-width: 600px;
-    margin: 50px auto;
-}
-
-#modalEditarVenta .carrito-item {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-#modalEditarVenta .carrito-total {
-    font-size: 1.2em;
-    font-weight: 600;
-    margin-top: 10px;
-    text-align: right;
-}
-
-
-#listaProductos thead th:hover,
-#historialVentas thead th:hover {
-    background-color: #f1f1f1;
-}
-
 
 /* Estilo para el grupo de entrada de agregar producto */
 .input-group {
@@ -1362,7 +1067,7 @@ body {
         padding: 8px;
     }
     .admin-table tbody tr:last-child td {
-        border-bottom: 1px solid #000; /* Asegura el borde inferior en la última fila */
+        border-bottom: 1px solid #000;
     }
     .resumen-columnas {
         display: flex;
@@ -1376,23 +1081,7 @@ body {
         height: auto;
     }
 }
-body {
-    position: relative;
-    min-height: 100vh;
-}
-body::after {   
-    content: "";
-    background: url('./images/Logoceleste.png') no-repeat center center; /* Centra la imagen */
-    background-size: 50%; /* Tamaño relativo al viewport (ajústalo) */
-    opacity: 0.2; /* Transparencia (0.05 a 0.3) */
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9999; /* Encima de todo */
-    pointer-events: none; /* Permite interactuar con elementos debajo */
-}
+
 .caps-lock-warning {
     color: #e74c3c;
     font-size: 0.85rem;
@@ -1405,6 +1094,7 @@ body::after {
 .caps-lock-warning i {
     font-size: 1rem;
 }
+
 .login-notification {
     position: fixed;
     top: 20px;
@@ -1419,83 +1109,13 @@ body::after {
 }
 
 .login-notification.error {
-    background-color: #e74c3c; /* Rojo para errores */
+    background-color: #e74c3c;
 }
 
 .login-notification.success {
-    background-color: #2ecc71; /* Verde para éxito */
+    background-color: #2ecc71;
 }
 
 .login-notification.show {
     opacity: 1;
-}
-/* Estilos existentes asumidos */
-/* Estilos del modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow: auto;
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.table th,
-.table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.table th {
-    background-color: #f4f4f4;
-    font-weight: 600;
-}
-
-.table tr:hover {
-    background-color: #f9f9f9;
-}
-
-.btn-sm {
-    padding: 5px 10px;
-    font-size: 14px;
-}
-
-/* Asegurar visibilidad del modal */
-.modal[style*="display: block"] {
-    opacity: 1;
-    visibility: visible;
 }

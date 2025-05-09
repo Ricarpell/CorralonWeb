@@ -2,6 +2,28 @@ const API_URL = window.location.hostname === "localhost"
     ? "http://localhost:5000" 
     : "https://corralon-backend.onrender.com";
 
+// Función para abrir un modal
+function abrirModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add("show");
+    } else {
+        console.error(`Modal con ID ${modalId} no encontrado`);
+    }
+}
+
+// Función para cerrar un modal
+function cerrarModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove("show");
+        const form = modal.querySelector("form");
+        if (form) form.reset();
+    } else {
+        console.error(`Modal con ID ${modalId} no encontrado`);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -56,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             mostrarNotificacion("Usuario creado exitosamente", "success");
-            document.getElementById("createUserForm").reset();
+            cerrarModal("createUserModal");
             loadUsers();
         } catch (error) {
             console.error("Error al crear usuario:", error);
@@ -79,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Guardando...';
 
         try {
-            // Intentar con la URL principal
             let url = `${API_URL}/api/Usuarios/${id}`;
             console.log(`Enviando PUT a ${url} con cuerpo:`, { contraseña: password, rol: role });
             let response = await fetch(url, {
@@ -91,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({ contraseña: password, rol: role })
             });
 
-            // Intentar URLs alternativas si falla
             if (response.status === 404) {
                 url = `${API_URL}/api/Usuarios/update/${id}`;
                 console.log(`Reintentando PUT a ${url} debido a 404`);
@@ -122,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const responseData = await response.json();
             console.log("Respuesta exitosa del PUT:", responseData);
             mostrarNotificacion("Usuario actualizado exitosamente", "success");
-            document.getElementById("editUserModal").style.display = "none";
+            cerrarModal("editUserModal");
             loadUsers();
         } catch (error) {
             console.error("Error en editUserForm:", error);
@@ -133,50 +153,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Configurar modal
-    const modal = document.getElementById("editUserModal");
-    if (!modal) {
-        console.error("Elemento #editUserModal no encontrado en el DOM");
-    }
-    const closeBtn = modal?.querySelector(".close");
-    if (closeBtn) {
-        closeBtn.onclick = () => {
-            console.log("Cerrando modal mediante botón de cierre");
-            modal.style.display = "none";
-        };
-    }
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            console.log("Cerrando modal al hacer clic fuera");
-            modal.style.display = "none";
-        }
-    };
-
-    // Configurar modal de creación
-    const createModal = document.getElementById("createUserModal");
-    if (!createModal) {
-        console.error("Elemento #createUserModal no encontrado en el DOM");
-    }
-    const createCloseBtn = createModal?.querySelector(".close");
-    if (createCloseBtn) {
-        createCloseBtn.onclick = () => {
-            console.log("Cerrando modal de creación mediante botón de cierre");
-            createModal.style.display = "none";
-        };
-    }
-    window.onclick = (event) => {
-        if (event.target === createModal) {
-            console.log("Cerrando modal de creación al hacer clic fuera");
-            createModal.style.display = "none";
-        }
-    };
-
     // Configurar botón de nuevo usuario
     document.getElementById("crearUsuarioBtn")?.addEventListener("click", () => {
-        const createModal = document.getElementById("createUserModal");
-        if (createModal) {
-            createModal.style.display = "block";
-            document.getElementById("createUserForm").reset();
+        abrirModal("createUserModal");
+    });
+
+    // Configurar cierre de modales
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = btn.closest('.modal');
+            if (modal) cerrarModal(modal.id);
+        });
+    });
+
+    // Clic fuera del modal
+    window.addEventListener("click", (event) => {
+        const modal = document.querySelector(".modal.show");
+        if (modal && event.target === modal) {
+            cerrarModal(modal.id);
         }
     });
 });
@@ -209,64 +203,117 @@ async function loadUsers() {
             const rol = user.rol || user.Rol || user.role || "Sin rol definido";
             console.log(`Procesando usuario: ID=${user.id}, Nombre=${user.nombre}, Rol=${rol}`);
             if (!user.rol && !user.Rol && !user.role) {
-                console.warn(`Advertencia: El campo 'rol' no está presente en el usuario ID=${user.id}`);
+                console.warn(`Advertencia: El campo 'rol' no está definido para el usuario ${user.nombre}`);
             }
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${user.id}</td>
                 <td>${user.nombre}</td>
                 <td>${rol}</td>
-                <td><button class="btn btn-primary btn-sm" onclick="openEditModal(${user.id}, '${user.nombre}', '${rol}')">Editar</button></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-sm btn-action btn-editar" data-id="${user.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm btn-action btn-eliminar" data-id="${user.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
             `;
             tbody.appendChild(row);
         });
+
+        // Asignar eventos a botones dinámicos
+        asignarEventosBotones();
     } catch (error) {
         console.error("Error al cargar usuarios:", error);
-        mostrarNotificacion("Error al cargar usuarios", "error");
+        mostrarNotificacion(error.message || "Error al cargar usuarios", "error");
     }
 }
 
-// Abrir modal de edición
-function openEditModal(id, username, role) {
-    console.log(`Intentando abrir modal para usuario: ID=${id}, Nombre=${username}, Rol=${role}`);
-    const modal = document.getElementById("editUserModal");
-    if (!modal) {
-        console.error("Elemento #editUserModal no encontrado en el DOM");
-        return;
-    }
-    const editUserId = document.getElementById("editUserId");
-    const editUsername = document.getElementById("editUsername");
-    const editRole = document.getElementById("editRole");
-    const editPassword = document.getElementById("editPassword");
+// Función para asignar eventos a botones dinámicos
+function asignarEventosBotones() {
+    document.querySelectorAll(".btn-editar").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            abrirModalEditarUsuario(id);
+        });
+    });
 
-    if (!editUserId || !editUsername || !editRole || !editPassword) {
-        console.error("Uno o más elementos del formulario de edición no encontrados");
-        return;
-    }
-
-    editUserId.value = id;
-    editUsername.value = username;
-    editRole.value = role === "Sin rol definido" ? "User" : role;
-    editPassword.value = "";
-    modal.style.display = "block";
-    console.log("Modal establecido a display: block");
+    document.querySelectorAll(".btn-eliminar").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            eliminarUsuario(id);
+        });
+    });
 }
 
-// Reutilizar función de notificación
-function mostrarNotificacion(mensaje, tipo = "error") {
+// Función para abrir el modal de edición de usuario
+async function abrirModalEditarUsuario(id) {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`${API_URL}/api/Usuarios/${id}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error al cargar datos del usuario");
+        }
+
+        const user = await response.json();
+        console.log("Datos del usuario cargado:", user);
+
+        document.getElementById("editUserId").value = user.id;
+        document.getElementById("editUsername").value = user.nombre;
+        document.getElementById("editPassword").value = "";
+        document.getElementById("editRole").value = user.rol || user.Rol || user.role || "User";
+
+        abrirModal("editUserModal");
+    } catch (error) {
+        console.error("Error al cargar usuario:", error);
+        mostrarNotificacion(error.message || "Error al cargar usuario", "error");
+    }
+}
+
+// Función para eliminar usuario
+async function eliminarUsuario(id) {
+    if (!confirm("¿Estás seguro de eliminar este usuario?")) return;
+
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`${API_URL}/api/Usuarios/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error al eliminar usuario");
+        }
+
+        mostrarNotificacion("Usuario eliminado exitosamente", "success");
+        loadUsers();
+    } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+        mostrarNotificacion(error.message || "Error al eliminar usuario", "error");
+    }
+}
+
+// Función para mostrar notificaciones
+function mostrarNotificacion(mensaje, tipo = "info") {
     const notificacion = document.createElement("div");
-    notificacion.className = `login-notification ${tipo}`;
-    notificacion.textContent = mensaje;
+    notificacion.className = `notificacion ${tipo}`;
+    notificacion.innerHTML = `
+        <i class="fas fa-${tipo === 'success' ? 'check-circle' : tipo === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${mensaje}</span>
+    `;
     document.body.appendChild(notificacion);
-    
-    setTimeout(() => {
-        notificacion.classList.add("show");
-    }, 10);
-    
+
+    setTimeout(() => notificacion.classList.add("show"), 10);
     setTimeout(() => {
         notificacion.classList.remove("show");
-        setTimeout(() => {
-            document.body.removeChild(notificacion);
-        }, 300);
+        setTimeout(() => notificacion.remove(), 300);
     }, 3000);
 }

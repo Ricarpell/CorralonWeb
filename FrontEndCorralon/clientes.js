@@ -4,7 +4,29 @@ let isSubmitting = false;
 const API_URL = window.location.hostname === "localhost" 
     ? "http://localhost:5000" 
     : "https://corralon-backend.onrender.com";
-    
+
+// Función para abrir un modal
+function abrirModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add("show");
+    } else {
+        console.error(`Modal con ID ${modalId} no encontrado`);
+    }
+}
+
+// Función para cerrar un modal
+function cerrarModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove("show");
+        const form = modal.querySelector("form");
+        if (form) form.reset();
+    } else {
+        console.error(`Modal con ID ${modalId} no encontrado`);
+    }
+}
+
 // Función principal de inicialización
 function initClientes() {
     const token = localStorage.getItem("token");
@@ -42,8 +64,16 @@ function asignarEventosPrincipales() {
     document.querySelectorAll('.close-modal').forEach(btn => {
         btn.addEventListener('click', () => {
             const modal = btn.closest('.modal');
-            if (modal) modal.classList.remove('show');
+            if (modal) cerrarModal(modal.id);
         });
+    });
+
+    // Clic fuera del modal
+    window.addEventListener("click", (event) => {
+        const modal = document.querySelector(".modal.show");
+        if (modal && event.target === modal) {
+            cerrarModal(modal.id);
+        }
     });
 }
 
@@ -102,7 +132,8 @@ function renderizarClientes() {
 
 // Función para abrir el modal de cliente
 function abrirModalCliente(id = null) {
-    const modal = document.getElementById("modalCliente");
+    const modalId = "modalCliente";
+    abrirModal(modalId);
     const title = document.getElementById("modalClienteTitle");
     const form = document.getElementById("formCliente");
 
@@ -122,8 +153,6 @@ function abrirModalCliente(id = null) {
     } else {
         title.textContent = "Nuevo Cliente";
     }
-
-    modal.classList.add("show");
 }
 
 // Función para validar email
@@ -177,7 +206,7 @@ async function guardarCliente(token) {
         }
 
         await cargarDatos(token);
-        document.getElementById("modalCliente").classList.remove("show");
+        cerrarModal("modalCliente");
         mostrarNotificacion(`Cliente ${id ? 'actualizado' : 'creado'} con éxito`, "success");
     } catch (error) {
         console.error("Error al guardar cliente:", error);
