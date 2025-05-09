@@ -263,9 +263,6 @@ async function loadUsers() {
                         <button class="btn btn-primary btn-sm btn-action btn-editar" data-id="${user.id}">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm btn-action btn-eliminar" data-id="${user.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
                     </div>
                 </td>
             `;
@@ -291,13 +288,6 @@ function asignarEventosBotones() {
         btn.removeEventListener("click", handleEditClick);
         btn.addEventListener("click", handleEditClick);
     });
-
-    const deleteButtons = document.querySelectorAll(".btn-eliminar");
-    console.log(`[DEBUG] Botones .btn-eliminar encontrados: ${deleteButtons.length}`);
-    deleteButtons.forEach(btn => {
-        btn.removeEventListener("click", handleDeleteClick);
-        btn.addEventListener("click", handleDeleteClick);
-    });
 }
 
 // Manejadores de eventos para evitar duplicados
@@ -310,17 +300,6 @@ function handleEditClick(event) {
     }
     console.log(`[DEBUG] Clic en botón editar para usuario ID: ${id}`);
     abrirModalEditarUsuario(id);
-}
-
-function handleDeleteClick(event) {
-    const id = event.currentTarget.dataset.id;
-    if (!id || isNaN(id)) {
-        console.error(`[ERROR] ID inválido para el botón eliminar: ${id}`);
-        mostrarNotificacion("ID de usuario inválido", "error");
-        return;
-    }
-    console.log(`[DEBUG] Clic en botón eliminar para usuario ID: ${id}`);
-    eliminarUsuario(id);
 }
 
 // Función para abrir el modal de edición de usuario
@@ -361,39 +340,6 @@ function abrirModalEditarUsuario(id) {
     editRole.value = user.rol || user.Rol || user.role || "User";
 
     abrirModal("editUserModal");
-}
-
-// Función para eliminar usuario
-async function eliminarUsuario(id) {
-    if (!confirm("¿Estás seguro de eliminar este usuario?")) return;
-
-    const token = localStorage.getItem("token");
-    console.log(`[DEBUG] Iniciando eliminación de usuario ID: ${id}`);
-    try {
-        console.log(`[DEBUG] Enviando solicitud DELETE a ${API_URL}/api/Usuarios/${id}`);
-        const response = await fetch(`${API_URL}/api/Usuarios/${id}`, {
-            method: "DELETE",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        console.log(`[DEBUG] Respuesta DELETE: Status=${response.status}, StatusText=${response.statusText}`);
-        if (!response.ok) {
-            let errorData;
-            try {
-                errorData = await response.json();
-                console.error("[DEBUG] Cuerpo del error:", errorData);
-            } catch (e) {
-                errorData = { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
-            }
-            throw new Error(errorData.message || "Error al eliminar usuario");
-        }
-
-        mostrarNotificacion("Usuario eliminado exitosamente", "success");
-        loadUsers();
-    } catch (error) {
-        console.error("[ERROR] Error al eliminar usuario:", error);
-        mostrarNotificacion(error.message || "Error al eliminar usuario", "error");
-    }
 }
 
 // Función para mostrar notificaciones
