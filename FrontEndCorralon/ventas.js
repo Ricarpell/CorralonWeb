@@ -178,9 +178,9 @@ function renderizarProductos() {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${producto.nombre}</td>
-            <td><span class="categoria-badge">${categoria ? categoria.nombre : 'Sin categoría'}</span></td>
+            <td>${categoria ? categoria.nombre : 'Sin categoría'}</span></td>
             <td class="stock-cell ${producto.stock < 10 ? 'stock-low' : ''}">${producto.stock}</td>
-            <td class="price-cell">$${producto.precio.toFixed(2)}</td>
+            <td>$${producto.precio.toFixed(2)}</td>
             <td>
                 <button class="btn btn-primary btn-sm btn-action btn-agregar" data-id="${producto.id}">
                     <i class="fas fa-plus"></i>
