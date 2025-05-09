@@ -127,8 +127,8 @@ function renderizarProductos() {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${producto.nombre}</td>
-            <td><span class="categoria-badge">${categoria ? categoria.nombre : 'Sin categoría'}</span></td>
-            <td class="price-cell">$${producto.precio.toFixed(2)}</td>
+            <td>${categoria ? categoria.nombre : 'Sin categoría'}</td> <!-- Eliminado categoria-badge -->
+            <td>$${producto.precio.toFixed(2)}</td> <!-- Eliminado price-cell -->
             <td class="stock-cell ${producto.stock < 10 ? 'stock-low' : ''}">${producto.stock}</td>
             <td>
                 <div class="action-buttons">
