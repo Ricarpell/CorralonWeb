@@ -2,6 +2,9 @@ const API_URL = window.location.hostname === "localhost"
     ? "http://localhost:5000" 
     : "https://corralon-backend.onrender.com";
 
+// Almacenar usuarios cargados
+let usuarios = [];
+
 // Función para abrir un modal
 function abrirModal(modalId) {
     const modal = document.getElementById(modalId);
@@ -234,17 +237,17 @@ async function loadUsers() {
             throw new Error(errorData.message || "Error al cargar usuarios");
         }
 
-        const users = await response.json();
-        console.log("[DEBUG] Respuesta completa de /api/Usuarios:", JSON.stringify(users, null, 2));
+        usuarios = await response.json();
+        console.log("[DEBUG] Respuesta completa de /api/Usuarios:", JSON.stringify(usuarios, null, 2));
         const tbody = document.getElementById("usersTableBody");
         if (!tbody) {
             console.error("[ERROR] Elemento #usersTableBody no encontrado en el DOM");
             return;
         }
         tbody.innerHTML = "";
-        console.log(`[DEBUG] Generando ${users.length} filas de usuarios`);
+        console.log(`[DEBUG] Generando ${usuarios.length} filas de usuarios`);
 
-        users.forEach(user => {
+        usuarios.forEach(user => {
             const rol = user.rol || user.Rol || user.role || "Sin rol definido";
             console.log(`[DEBUG] Procesando usuario: ID=${user.id}, Nombre=${user.nombre}, Rol=${rol}`);
             if (!user.rol && !user.Rol && !user.role) {
@@ -321,8 +324,7 @@ function handleDeleteClick(event) {
 }
 
 // Función para abrir el modal de edición de usuario
-async function abrirModalEditarUsuario(id) {
-    const token = localStorage.getItem("token");
+function abrirModalEditarUsuario(id) {
     console.log(`[DEBUG] Iniciando abrirModalEditarUsuario para usuario ID: ${id}`);
     
     // Verificar existencia de elementos del formulario
@@ -337,67 +339,28 @@ async function abrirModalEditarUsuario(id) {
         return;
     }
 
-    try {
-        // Lista de endpoints a probar
-        const endpoints = [
-            { url: `${API_URL}/api/Usuarios/details/${id}`, method: "GET" },
-            { url: `${API_URL}/api/Usuarios/byId/${id}`, method: "GET" },
-            { url: `${API_URL}/api/Usuarios/${id}`, method: "GET" },
-            { url: `${API_URL}/api/Usuarios/get`, method: "POST", body: JSON.stringify({ id: parseInt(id) }) }
-        ];
-
-        let response, user;
-        for (const endpoint of endpoints) {
-            console.log(`[DEBUG] Probando ${endpoint.method} a ${endpoint.url}`);
-            response = await fetch(endpoint.url, {
-                method: endpoint.method,
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                },
-                body: endpoint.body || null
-            });
-
-            console.log(`[DEBUG] Respuesta de ${endpoint.url}: Status=${response.status}, StatusText=${response.statusText}, Headers:`, [...response.headers]);
-            if (response.ok) {
-                user = await response.json();
-                console.log("[DEBUG] Datos del usuario cargado:", user);
-                break;
-            } else {
-                let errorData;
-                try {
-                    const text = await response.text();
-                    console.log("[DEBUG] Cuerpo de la respuesta de error:", text || "Vacío");
-                    errorData = text ? JSON.parse(text) : { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
-                } catch (e) {
-                    errorData = { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
-                }
-                console.warn(`[WARNING] Falló ${endpoint.method} a ${endpoint.url}:`, errorData);
-            }
-        }
-
-        if (!response.ok) {
-            console.error("[ERROR] Ningún endpoint funcionó para cargar datos del usuario ID:", id);
-            // Abrir el modal con datos vacíos
-            editUserId.value = id;
-            editUsername.value = "";
-            editPassword.value = "";
-            editRole.value = "User";
-            abrirModal("editUserModal");
-            throw new Error("No se pudo cargar los datos del usuario");
-        }
-
-        // Ajustar según el formato real de la respuesta
-        editUserId.value = user.id || id;
-        editUsername.value = user.nombre || user.nombreUsuario || "";
+    // Buscar usuario en los datos locales
+    const user = usuarios.find(u => u.id === parseInt(id));
+    if (!user) {
+        console.error(`[ERROR] Usuario con ID ${id} no encontrado en los datos locales`);
+        mostrarNotificacion("Usuario no encontrado", "error");
+        editUserId.value = id;
+        editUsername.value = "";
         editPassword.value = "";
-        editRole.value = user.rol || user.Rol || user.role || "User";
-
+        editRole.value = "User";
         abrirModal("editUserModal");
-    } catch (error) {
-        console.error("[ERROR] Error en abrirModalEditarUsuario:", error);
-        mostrarNotificacion(error.message || "Error al cargar usuario", "error");
+        return;
     }
+
+    console.log(`[DEBUG] Datos del usuario cargado:`, user);
+
+    // Llenar el formulario con los datos del usuario
+    editUserId.value = user.id;
+    editUsername.value = user.nombre || "";
+    editPassword.value = "";
+    editRole.value = user.rol || user.Rol || user.role || "User";
+
+    abrirModal("editUserModal");
 }
 
 // Función para eliminar usuario
