@@ -37,13 +37,6 @@
             right: 5px;
             color: #007bff;
         }
-        /* Asegurar que el modal de categorías esté por encima del modal de productos */
-        .modal {
-            z-index: 1000;
-        }
-        #modalCategoria {
-            z-index: 1100;
-        }
     </style>
 </head>
 <body>
@@ -55,7 +48,7 @@
                     <i class="fas fa-arrow-left"></i> Dashboard
                 </button>
                 <button id="cerrarSesion" class="btn btn-danger">
- extrapolation:                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                    <i class="fas fa-sign-out-alt"></i> Cerrar
                 </button>
             </div>
         </div>
@@ -134,12 +127,7 @@
                         </div>
                         <div class="form-group">
                             <label for="productoCategoria" class="form-label">Categoría</label>
-                            <div style="display: flex; gap: 10px; align-items: center;">
-                                <select id="productoCategoria" class="form-control" required></select>
-                                <button type="button" id="agregarCategoriaBtn" class="btn btn-secondary btn-sm">
-                                    <i class="fas fa-plus"></i> Nueva Categoría
-                                </button>
-                            </div>
+                            <select id="productoCategoria" class="form-control" required></select>
                         </div>
                         <div class="form-group">
                             <label for="productoPrecio" class="form-label">Precio Venta</label>
@@ -195,5 +183,5 @@
             window.location.href = "index.html";
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d16c835d29adb2',t:'MTc0Njc5NjA4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

@@ -9,6 +9,7 @@ const API_URL = window.location.hostname === "localhost"
     ? "http://localhost:5000" 
     : "https://corralon-backend.onrender.com";
 
+
 const formatter = new Intl.NumberFormat('es-CL', {
     style: 'decimal',
     minimumFractionDigits: 2,
@@ -34,7 +35,6 @@ function initAdmin() {
 function asignarEventosPrincipales() {
     document.getElementById("nuevaCategoriaBtn")?.addEventListener("click", () => abrirModalCategoria());
     document.getElementById("nuevoProductoBtn")?.addEventListener("click", () => abrirModalProducto());
-    document.getElementById("agregarCategoriaBtn")?.addEventListener("click", () => abrirModalCategoria());
     
     const formCategoria = document.getElementById("formCategoria");
     formCategoria?.addEventListener("submit", (e) => {
@@ -383,14 +383,6 @@ async function guardarCategoria(token) {
 
         await cargarDatos(token);
         document.getElementById("modalCategoria").classList.remove("show");
-        // Mantener el modal de productos abierto y actualizar el select
-        if (document.getElementById("modalProducto").classList.contains("show")) {
-            llenarSelectCategorias();
-            const nuevaCategoria = categorias.find(c => c.nombre === nombre);
-            if (nuevaCategoria) {
-                document.getElementById("productoCategoria").value = nuevaCategoria.id;
-            }
-        }
         mostrarNotificacion(`Categoría ${id ? 'actualizada' : 'creada'} con éxito`, "success");
     } catch (error) {
         console.error("Error al guardar categoría:", error);
