@@ -237,7 +237,7 @@ function renderizarHistorial() {
             <td>${venta.id}</td>
             <td class="fecha-venta">${new Date(venta.fecha).toLocaleDateString()}</td>
             <td>${cliente ? cliente.nombre : 'Sin cliente'}</td>
-            <td class="price-cell">$${venta.total.toFixed(2)}</td>
+            <td>$${venta.total.toFixed(2)}</td>
             <td>
                 <div class="action-buttons">
                     <button class="btn btn-info btn-sm btn-action btn-detalle" data-id="${venta.id}">
@@ -489,7 +489,7 @@ async function mostrarDetalleVenta(id) {
             row.innerHTML = `
                 <td>${producto ? producto.nombre : 'Producto eliminado'}</td>
                 <td class="carrito-cantidad">${detalle.cantidad}</td>
-                <td class="price-cell">$${detalle.precioUnitario.toFixed(2)}</td>
+                <td>${detalle.precioUnitario.toFixed(2)}</td>
                 <td class="carrito-subtotal">$${detalle.cantidad * detalle.precioUnitario.toFixed(2)}</td>
             `;
             tbody.appendChild(row);
