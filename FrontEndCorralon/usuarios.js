@@ -338,52 +338,54 @@ async function abrirModalEditarUsuario(id) {
     }
 
     try {
-        // Intentar con endpoint alternativo
-        let url = `${API_URL}/api/Usuarios/get/${id}`; // Cambiado a /get/${id}
-        console.log(`[DEBUG] Enviando solicitud a ${url}`);
-        let response = await fetch(url, {
-            method: "GET",
-            headers: { 
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
+        // Lista de endpoints a probar
+        const endpoints = [
+            { url: `${API_URL}/api/Usuarios/details/${id}`, method: "GET" },
+            { url: `${API_URL}/api/Usuarios/byId/${id}`, method: "GET" },
+            { url: `${API_URL}/api/Usuarios/${id}`, method: "GET" },
+            { url: `${API_URL}/api/Usuarios/get`, method: "POST", body: JSON.stringify({ id: parseInt(id) }) }
+        ];
 
-        // Si falla con 404 o 405, intentar con el endpoint original
-        if (response.status === 404 || response.status === 405) {
-            url = `${API_URL}/api/Usuarios/${id}`;
-            console.log(`[DEBUG] Reintentando con ${url} debido a ${response.status}`);
-            response = await fetch(url, {
-                method: "GET",
-                headers: { 
+        let response, user;
+        for (const endpoint of endpoints) {
+            console.log(`[DEBUG] Probando ${endpoint.method} a ${endpoint.url}`);
+            response = await fetch(endpoint.url, {
+                method: endpoint.method,
+                headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
-                }
+                },
+                body: endpoint.body || null
             });
+
+            console.log(`[DEBUG] Respuesta de ${endpoint.url}: Status=${response.status}, StatusText=${response.statusText}, Headers:`, [...response.headers]);
+            if (response.ok) {
+                user = await response.json();
+                console.log("[DEBUG] Datos del usuario cargado:", user);
+                break;
+            } else {
+                let errorData;
+                try {
+                    const text = await response.text();
+                    console.log("[DEBUG] Cuerpo de la respuesta de error:", text || "Vacío");
+                    errorData = text ? JSON.parse(text) : { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
+                } catch (e) {
+                    errorData = { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
+                }
+                console.warn(`[WARNING] Falló ${endpoint.method} a ${endpoint.url}:`, errorData);
+            }
         }
 
-        console.log(`[DEBUG] Respuesta de ${url}: Status=${response.status}, StatusText=${response.statusText}, Headers:`, [...response.headers]);
         if (!response.ok) {
-            let errorData;
-            try {
-                const text = await response.text();
-                console.log("[DEBUG] Cuerpo de la respuesta de error:", text || "Vacío");
-                errorData = text ? JSON.parse(text) : { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
-            } catch (e) {
-                errorData = { message: `Error HTTP ${response.status}: ${response.statusText || 'No encontrado'}` };
-            }
-            console.error("[ERROR] Error al cargar datos del usuario:", errorData);
-            // Abrir el modal con datos vacíos para mantener la funcionalidad
+            console.error("[ERROR] Ningún endpoint funcionó para cargar datos del usuario ID:", id);
+            // Abrir el modal con datos vacíos
             editUserId.value = id;
             editUsername.value = "";
             editPassword.value = "";
             editRole.value = "User";
             abrirModal("editUserModal");
-            throw new Error(errorData.message || `Error al cargar datos del usuario (HTTP ${response.status})`);
+            throw new Error("No se pudo cargar los datos del usuario");
         }
-
-        const user = await response.json();
-        console.log("[DEBUG] Datos del usuario cargado:", user);
 
         // Ajustar según el formato real de la respuesta
         editUserId.value = user.id || id;
