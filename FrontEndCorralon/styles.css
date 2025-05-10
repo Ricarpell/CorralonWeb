@@ -1128,3 +1128,12 @@ body::after {
 #detalleVentas.admin-table tr th:nth-child(6) {
     text-align: right;
 }
+@media print {
+    /* ... reglas existentes ... */
+    #printableReport .admin-table tr td:nth-child(6) {
+        text-align: right;
+    }
+    #printableReport .admin-table tr th:nth-child(6) {
+        text-align: right;
+    }
+}
