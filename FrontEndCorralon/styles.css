@@ -1119,3 +1119,12 @@ body::after {
 .login-notification.show {
     opacity: 1;
 }
+/* Alinear la columna Total (6ª) a la derecha en la tabla de Detalle de Ventas */
+#detalleVentas.admin-table tr td:nth-child(6) {
+    text-align: right;
+}
+
+/* Alinear el encabezado de Total a la derecha para consistencia */
+#detalleVentas.admin-table tr th:nth-child(6) {
+    text-align: right;
+}
