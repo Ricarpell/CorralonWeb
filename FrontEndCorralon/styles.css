@@ -1137,3 +1137,22 @@ body::after {
         text-align: right;
     }
 }
+/* Alinear la columna Cantidad (5ª) a la derecha en la tabla de Detalle de Ventas */
+#detalleVentas.admin-table tr td:nth-child(5) {
+    text-align: right;
+}
+
+/* Alinear el encabezado de Cantidad a la derecha */
+#detalleVentas.admin-table tr th:nth-child(5) {
+    text-align: right;
+}
+
+/* Alinear Cantidad en la versión imprimible */
+@media print {
+    #printableReport .admin-table tr td:nth-child(5) {
+        text-align: right;
+    }
+    #printableReport .admin-table tr th:nth-child(5) {
+        text-align: right;
+    }
+}

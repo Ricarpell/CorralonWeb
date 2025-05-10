@@ -487,6 +487,8 @@ function imprimirReporte() {
     });
 }
 
+/* ... contenido previo de reportes.js ... */
+
 /* Exportar a PDF */
 function exportarPDF() {
     if (!ultimoReporte) {
@@ -543,12 +545,19 @@ function exportarPDF() {
             venta.productoNombre,
             venta.cantidad.toLocaleString(),
             formatearMoneda(venta.total)
-        ])
+        ]),
+        // Nuevo: Configurar alineación de columnas
+        columnStyles: {
+            4: { halign: 'right' }, // Columna Cantidad (índice 4, quinta columna)
+            5: { halign: 'right' }  // Columna Total (índice 5, sexta columna)
+        }
     });
 
     doc.save("Informe_Ventas.pdf");
 }
 
+/* ... resto del contenido de reportes.js ... */
+/* Exportar a Excel */
 /* Exportar a Excel */
 function exportarExcel() {
     if (!ultimoReporte) {
@@ -604,9 +613,10 @@ function exportarExcel() {
                 const cellRef = XLSX.utils.encode_cell(cellAddress);
                 if (!ws[cellRef]) continue;
 
-                // Centrar todas las celdas
+                // Alinear Cantidad (columna 4) y Total (columna 5) a la derecha en filas de datos
+                const alignment = (C === 4 || C === 5) && R >= 7 ? { horizontal: 'right' } : { horizontal: 'center' };
                 ws[cellRef].s = {
-                    alignment: { horizontal: 'center', vertical: 'center' }
+                    alignment: alignment
                 };
 
                 // Formato de moneda para la columna "Total" (columna F, índice 5)
@@ -643,7 +653,6 @@ function exportarExcel() {
         mostrarNotificacion("Error al exportar a Excel: " + error.message, "error");
     }
 }
-
 /* Generar reporte */
 async function generarReporte(token) {
     const filtros = obtenerValoresFiltros();
