@@ -556,8 +556,6 @@ function exportarPDF() {
     doc.save("Informe_Ventas.pdf");
 }
 
-/* ... resto del contenido de reportes.js ... */
-/* Exportar a Excel */
 /* Exportar a Excel */
 function exportarExcel() {
     if (!ultimoReporte) {
@@ -592,6 +590,9 @@ function exportarExcel() {
             ])
         ];
 
+        // Depuración: Mostrar datos generados
+        console.log("Datos para Excel:", data);
+
         // Crear hoja de trabajo
         const ws = XLSX.utils.aoa_to_sheet(data);
 
@@ -613,10 +614,20 @@ function exportarExcel() {
                 const cellRef = XLSX.utils.encode_cell(cellAddress);
                 if (!ws[cellRef]) continue;
 
-                // Alinear Cantidad (columna 4) y Total (columna 5) a la derecha en filas de datos
-                const alignment = (C === 4 || C === 5) && R >= 7 ? { horizontal: 'right' } : { horizontal: 'center' };
+                // Cambio: Alinear Cantidad (índice 4) y Total (índice 5) a la derecha en filas de datos
+                const alignment = (C === 4 || C === 5) && R >= 7 ? { horizontal: 'right', vertical: 'center' } : { horizontal: 'center', vertical: 'center' };
+
+                // Depuración: Confirmar alineación aplicada
+                if (R >= 7 && (C === 4 || C === 5)) {
+                    console.log(`Celda ${cellRef}: Alineación =`, alignment);
+                }
+
                 ws[cellRef].s = {
-                    alignment: alignment
+                    alignment: alignment,
+                    // Asegurar que las celdas numéricas tengan el formato correcto
+                    ...(C === 5 && R >= 7 ? { numFmt: '$#,##0' } : {}),
+                    // Mantener fuente consistente
+                    font: { name: 'Calibri', sz: 11 }
                 };
 
                 // Formato de moneda para la columna "Total" (columna F, índice 5)
@@ -635,7 +646,7 @@ function exportarExcel() {
                 if (ws[cellRef]) {
                     ws[cellRef].s = {
                         alignment: { horizontal: 'center', vertical: 'center' },
-                        font: { bold: true }
+                        font: { bold: true, name: 'Calibri', sz: 11 }
                     };
                 }
             }
@@ -652,8 +663,7 @@ function exportarExcel() {
         console.error("Error al exportar a Excel:", error);
         mostrarNotificacion("Error al exportar a Excel: " + error.message, "error");
     }
-}
-/* Generar reporte */
+}/* Generar reporte */
 async function generarReporte(token) {
     const filtros = obtenerValoresFiltros();
     console.log("Filtros aplicados:", filtros); // Depuración
