@@ -712,13 +712,13 @@ body::after {
 }
 
 /* Botón de ver detalles */
-.btn-detalle {
+/* .btn-detalle {
     background-color: var(--accent);
     color: white;
     padding: 0.4rem 0.8rem;
     border-radius: 4px;
     font-size: 0.85rem;
-}
+} */
 
 .btn-detalle:hover {
     background-color: var(--secondary);
